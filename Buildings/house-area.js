@@ -206,6 +206,20 @@ function draw() {
   rect(199, 191, 1, 3);
   //swing
   translate(0, 0);
+  fill(105, 105, 105);
+  rect(340, 50, 8, 80);
+  rect(340, 50, 90, 8);
+  rect(430, 50, 8, 80);
+  rect(375, 50, 4, 60);
+  rect(395, 50, 4, 60);
+  fill(0);
+  rect(373, 105, 28, 10);
+  //sand ground
+  strokeWeight(8);
+  stroke(205, 133, 63);
+  fill(225, 191, 146);
+  rect(400, 180, 70, 50);
+  strokeWeight(0);
   //plants
   fill("green");
   rect(370, -44, 60, 60);
@@ -223,4 +237,36 @@ function draw() {
   fill(238, 232, 190);
   rect(520, 18, 80, 340);
   rect(120, 250, 850, 80);
+  //Bush
+  fill(0, 100, 0);
+  rect(340, -14, 40, 30);
+  rect(690, -14, 40, 30);
+  rect(670, -44, 50, 60);
+  //tree right
+  fill("brown");
+  rect(740, -80, 20, 95);
+  fill(0, 100, 0);
+  rect(720, -170, 60, 90);
+  //plants
+  fill("purple");
+  rect(150, 160, 5, 5);
+  rect(290, 50, 5, 5);
+  rect(650, 190, 5, 5);
+  rect(350, 160, 5, 5);
+  rect(170, 220, 5, 5);
+  rect(690, 90, 5, 5);
+  rect(770, 160, 5, 5);
+  rect(840, 60, 5, 5);
+  //bush playground
+  fill("green");
+  rect(320, 110, 20, 20);
+  rect(438, 110, 20, 20);
+  rect(290, 201, 20, 30);
+  //water
+  fill(70, 130, 180);
+  rect(740, 100, 100, 80);
+  rect(730, 110, 10, 60);
+  rect(720, 120, 10, 40);
+  rect(840, 110, 10, 60);
+  rect(850, 120, 10, 40);
 }
