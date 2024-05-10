@@ -154,5 +154,5 @@ function fishRemains(x, y) {
 }
 
 function draw() {
-  fishRemains(350, 250);
+  fish(350, 250);
 }
