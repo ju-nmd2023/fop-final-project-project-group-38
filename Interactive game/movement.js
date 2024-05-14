@@ -32,16 +32,15 @@ function draw() {
     updateCharacterPosition(); //character movement
     drawCharacter(characterX, characterY); //character with X and Y needed for movement
     if (isNearDoor()) {
-      dialogue(
-        "i languished in a loveless marriage in lodnin i lived only to read your letters\nI look at you and think god what have we done with our lives and what did it get us\that doesn't wipe the tears of the years away but I'm back in the city and I'm here to stay and you know what I'm here to do"
-      );
+      displayDoorPrompt();
     }
   }
 }
 
 let i = 0;
 let subString = "";
-let choice = "";
+let choice1 = "";
+let choice2 = "";
 function dialogue(str) {
   fill(0);
   strokeWeight(2);
@@ -55,21 +54,34 @@ function dialogue(str) {
   textFont("Courier");
   textWrap(CHAR);
 
+  let y = 395;
+
   setTimeout(function () {
     if (i < str.length) {
       subString += str[i];
       console.log(i);
       i++;
     }
-  }, 3000);
+  }, 1500);
   text(subString, 50, 325, 600, 375);
   if (i === str.length) {
+    choice1 = "Angelica...";
+    choice2 = "I'm not here for you...";
+    if (key === "s") {
+      y += 25;
+    } else if (key === "w") {
+      y = 395;
+    }
     fill(255, 0, 255, 50);
-    rect(40, 420, 620, 20);
-    choice = "Angelica...";
+    rect(40, y, 620, 20);
   }
   fill(255);
-  text(choice, 50, 425, 600, 50);
+  text(choice1, 50, 400, 600, 50);
+  text(choice2, 50, 425, 600, 50);
+
+  if (keyCode === 13) {
+    subString = "";
+  }
 }
 //starting screen
 function displayMenu() {
@@ -270,17 +282,19 @@ function drawCharacter(x, y) {
 }
 //MOVEMENT
 function updateCharacterPosition() {
-  if (keyIsDown(87)) {
-    characterY -= 1.5;
-  }
-  if (keyIsDown(83)) {
-    characterY += 1.5;
-  }
-  if (keyIsDown(65)) {
-    characterX -= 1.5;
-  }
-  if (keyIsDown(68)) {
-    characterX += 1.5;
+  if (subString === "") {
+    if (keyIsDown(87)) {
+      characterY -= 1.5;
+    }
+    if (keyIsDown(83)) {
+      characterY += 1.5;
+    }
+    if (keyIsDown(65)) {
+      characterX -= 1.5;
+    }
+    if (keyIsDown(68)) {
+      characterX += 1.5;
+    }
   }
 }
 //floor collision
