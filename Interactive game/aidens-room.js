@@ -4,6 +4,7 @@ let characterX = 210; //starting position of aiden in bedroom
 let characterY = 200;
 let bedroomVisible = true;
 let hallwayVisible = false;
+let entryRoomVisible = false;
 
 function setup() {
   createCanvas(700, 500);
@@ -11,10 +12,12 @@ function setup() {
   startButton.position(700, 500);
   startButton.mousePressed(startGame);
 }
+
 function startGame() {
   gameStarted = true;
   startButton.hide(); //hide the button when game was started
 }
+
 function draw() {
   background(0); // background menu
   if (!gameStarted) {
@@ -28,9 +31,13 @@ function draw() {
     } else {
       door.draw(); //removing doors in hallway when its visible
     }
+    if (entryRoomVisible) {
+      displayEntryRoom(); // Display the entry room if it's visible
+    }
     updateCharacterPosition(); //character movement
     drawCharacter(characterX, characterY); //character with X and Y needed for movement
-    // transitiom from bedroom to hallway
+
+    // transition from bedroom to hallway
     if (isNearDoor() && !hallwayVisible) {
       displayDoorPrompt();
       if (key === "x" || key === "X") {
@@ -38,11 +45,12 @@ function draw() {
         hallwayVisible = true;
       }
     }
+
     // next room, hallway and transition from stairs to entry room
-    if (isNearStairs() && !entryRoomVisible) {
+    if (isNearStairs() && !entryRoomVisible && hallwayVisible) {
       displayStairsPrompt();
       if (key === "x" || key === "X") {
-        displayEntryRoom();
+        entryRoomVisible = true;
       }
     }
   }
@@ -176,10 +184,19 @@ function bedroomAiden() {
 // door as an object have to transform it with class---constructor
 let door = {
   color: [94, 76, 38],
-  position: { x: 408, y: 136 },
-  size: { width: 36, height: 60 },
+  position: {
+    x: 408,
+    y: 136,
+  },
+  size: {
+    width: 36,
+    height: 60,
+  },
   handleColor: 230,
-  handlePosition: { x: 412, y: 166 },
+  handlePosition: {
+    x: 412,
+    y: 166,
+  },
   handleSize: 3,
   // function to draw the door
   draw: function () {
@@ -273,6 +290,7 @@ function checkCollisionsFloor(x, y, width, height) {
     characterY = y + height - 36;
   }
 }
+
 function isNearDoor() {
   let distance = dist(
     characterX,
@@ -290,9 +308,8 @@ function displayDoorPrompt() {
   text("Press 'X' to exit the room.", 340, 480);
 }
 
-//ANOTHER ROOM
+//ANOTHER ROOM HALLWAY
 function displayHallway() {
-  //draws hallway scene
   noStroke();
   fill(191, 137, 67);
   rect(250, 0, 200, 500);
@@ -307,18 +324,47 @@ function displayHallway() {
   fill(94, 76, 38);
   stroke(217, 153, 35);
   strokeWeight(1);
-  //stairs
-  rect(325, 30, 50, 10);
-  rect(330, 20, 40, 10);
-  rect(335, 10, 30, 10);
   //collision for this room
   checkCollisionsFloor(250, 30, 200, 470);
+  stairs.draw();
 }
+
 function exit(x, y) {
   fill(94, 76, 38);
   rect(x, y, 10, 60);
 }
-
+// Stairs as an object needed for exit interaction
+let stairs = {
+  position: {
+    x: 325,
+    y: 10,
+  },
+  size: {
+    width: 50,
+    height: 30,
+  },
+  color: [94, 76, 38],
+  draw: function () {
+    fill(this.color[0], this.color[1], this.color[2]);
+    rect(this.position.x, this.position.y, this.size.width, this.size.height);
+  },
+};
+function isNearStairs() {
+  let distance = dist(
+    characterX,
+    characterY,
+    stairs.position.x + stairs.size.width / 2,
+    stairs.position.y + stairs.size.height / 2
+  );
+  return distance < 50;
+}
+function displayStairsPrompt() {
+  textAlign(CENTER);
+  fill(255);
+  textSize(20);
+  text("Press 'X' to go downstairs.", 350, 480);
+}
+// ANOTHER ROOM - ENTRY ROOM
 function displayEntryRoom() {
   background(0);
   // room block
@@ -385,23 +431,6 @@ function displayEntryRoom() {
   fill(0);
   rect(305, 152, 2, 2);
   rect(302, 152, 2, 2);
-}
-// Stairs as an object needed for exit interaction
-let stairs = {
-  position: { x: 325, y: 10 },
-  size: { width: 50, height: 30 },
-  color: [94, 76, 38],
-  draw: function () {
-    fill(this.color[0], this.color[1], this.color[2]);
-    rect(this.position.x, this.position.y, this.size.width, this.size.height);
-  },
-};
-function isNearStairs() {
-  let distance = dist(
-    characterX,
-    characterY,
-    stairs.position.x + stairs.size.width / 2,
-    stairs.position.y + stairs.size.height / 2
-  );
-  return distance < 60;
+
+  checkCollisionsFloor(180, 220, 300, 180);
 }
