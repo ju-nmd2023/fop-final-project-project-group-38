@@ -1,42 +1,71 @@
 let gameStarted = false;
 let startButton;
-let characterX = 210; //starting position of aiden x
+let characterX = 210; //starting position of aiden in bedroom
 let characterY = 200;
+let bedroomVisible = true;
+let hallwayVisible = false;
+let entryRoomVisible = false;
 
 function setup() {
   createCanvas(700, 500);
-  //start button
   startButton = createButton("Play");
-  startButton.position(350, 260);
+  startButton.position(700, 500);
   startButton.mousePressed(startGame);
 }
-// start the game
+
 function startGame() {
   gameStarted = true;
-  startButton.hide();
+  startButton.hide(); //hide the button when game was started
 }
+
 function draw() {
   background(0); // background menu
-
-  // If game is not started, display menu
   if (!gameStarted) {
-    displayMenu();
+    displayMenu(); //starting menu
   } else {
-    // If game is started, display the game
-    bedroomAiden();
-    updateCharacterPosition();
-    drawCharacter(characterX, characterY);
-    checkCollisionsFloor();
-    displayDialogue();
+    if (bedroomVisible) {
+      bedroomAiden();
+    }
+    if (hallwayVisible) {
+      displayHallway();
+    } else {
+      door.draw(); //removing doors in hallway when its visible
+    }
+    if (entryRoomVisible) {
+      displayEntryRoom(); // Display the entry room if it's visible
+    }
+    updateCharacterPosition(); //character movement
+    drawCharacter(characterX, characterY); //character with X and Y needed for movement
+
+    // transition from bedroom to hallway
+    if (isNearDoor() && !hallwayVisible) {
+      displayDoorPrompt();
+      if (key === "x" || key === "X") {
+        bedroomVisible = false;
+        hallwayVisible = true;
+      }
+    }
+
+    // next room, hallway and transition from stairs to entry room
+    if (isNearStairs() && !entryRoomVisible && hallwayVisible) {
+      displayStairsPrompt();
+      if (key === "x" || key === "X") {
+        entryRoomVisible = true;
+      }
+    }
   }
 }
-
-// Function to display the menu
+//starting screen
 function displayMenu() {
   textAlign(CENTER);
   fill(255);
-  textSize(20);
-  text("Start your journey!", 350, 200);
+  textSize(15);
+  textFont("Courier");
+  text(
+    "Aiden is a boy, whose beloved sister disapears one day,\n without saying last goodbye.\n The only sign is the letter left on the desk in his room.\n Aiden has to find out what happened and where is Ellie...",
+    350,
+    200
+  );
 }
 
 function bedroomAiden() {
@@ -47,11 +76,6 @@ function bedroomAiden() {
   //floor
   fill(191, 137, 67);
   rect(180, 196, 300, 204);
-  //door
-  fill(94, 76, 38);
-  rect(408, 136, 36, 60);
-  fill(230);
-  rect(412, 166, 3);
   //bed
   fill(230);
   rect(192, 172, 60, 24);
@@ -154,7 +178,34 @@ function bedroomAiden() {
   rect(224, 131, 2, 1);
   rect(216, 130, 2);
   rect(226, 130, 2);
+  //collision for this room
+  checkCollisionsFloor(180, 196, 300, 204);
 }
+// door as an object have to transform it with class---constructor
+let door = {
+  color: [94, 76, 38],
+  position: {
+    x: 408,
+    y: 136,
+  },
+  size: {
+    width: 36,
+    height: 60,
+  },
+  handleColor: 230,
+  handlePosition: {
+    x: 412,
+    y: 166,
+  },
+  handleSize: 3,
+  // function to draw the door
+  draw: function () {
+    fill(this.color[0], this.color[1], this.color[2]);
+    rect(this.position.x, this.position.y, this.size.width, this.size.height);
+    fill(this.handleColor);
+    rect(this.handlePosition.x, this.handlePosition.y, this.handleSize);
+  },
+};
 
 function drawCharacter(x, y) {
   //Aiden look
@@ -211,82 +262,179 @@ function drawCharacter(x, y) {
   rect(x + 20, y + 2, 3, 6);
   rect(x - 3, y + 2, 3, 6);
 }
-
-function openDoor() {
-  if (key === "e") {
-    interactDoor = true;
-  }
-}
-//movement
-let moveSpeed = 2.6;
-let movingUp = false;
-let movingDown = false;
-let movingLeft = false;
-let movingRight = false;
-//movement WSAd
+//MOVEMENT WSAD
 function updateCharacterPosition() {
-  if (movingUp) {
-    characterY -= moveSpeed;
+  if (keyIsDown(87)) {
+    characterY -= 1.5;
   }
-  if (movingDown) {
-    characterY += moveSpeed;
+  if (keyIsDown(83)) {
+    characterY += 1.5;
   }
-  if (movingLeft) {
-    characterX -= moveSpeed;
+  if (keyIsDown(65)) {
+    characterX -= 1.5;
   }
-  if (movingRight) {
-    characterX += moveSpeed;
-  }
-}
-function keyPressed() {
-  if (key === "w") {
-    movingUp = true;
-  } else if (key === "s") {
-    movingDown = true;
-  } else if (key === "a") {
-    movingLeft = true;
-  } else if (key === "d") {
-    movingRight = true;
+  if (keyIsDown(68)) {
+    characterX += 1.5;
   }
 }
-function keyReleased() {
-  if (key === "w") {
-    movingUp = false;
-  } else if (key === "s") {
-    movingDown = false;
-  } else if (key === "a") {
-    movingLeft = false;
-  } else if (key === "d") {
-    movingRight = false;
-  }
-}
-
 //floor collision
-let floorX = 180;
-let floorY = 196;
-let floorWidth = 300;
-let floorHeight = 204;
-function checkCollisionsFloor() {
-  if (characterX < floorX) {
-    characterX = floorX;
-  } else if (characterX > floorX + floorWidth - 20) {
-    characterX = floorX + floorWidth - 20;
+function checkCollisionsFloor(x, y, width, height) {
+  if (characterX < x) {
+    characterX = x;
+  } else if (characterX > x + width - 20) {
+    characterX = x + width - 20;
   }
-  if (characterY < floorY) {
-    characterY = floorY;
-  } else if (characterY > floorY + floorHeight - 36) {
-    characterY = floorY + floorHeight - 36;
+  if (characterY < y) {
+    characterY = y;
+  } else if (characterY > y + height - 36) {
+    characterY = y + height - 36;
   }
 }
 
-//dialogue
-let dialogueText = "";
-let dialogueTimer = 0;
-let showNextDialogue = false;
-
-function displayDialogue() {
+function isNearDoor() {
+  let distance = dist(
+    characterX,
+    characterY,
+    door.position.x + door.size.width / 2,
+    door.position.y + door.size.height / 2
+  );
+  return distance < 50;
+}
+// when close to the door show this
+function displayDoorPrompt() {
   textAlign(CENTER);
-  fill(0);
+  fill(255);
   textSize(20);
-  text(dialogueText, 200, 100);
+  text("Press 'X' to exit the room.", 340, 480);
+}
+
+//ANOTHER ROOM HALLWAY
+function displayHallway() {
+  noStroke();
+  fill(191, 137, 67);
+  rect(250, 0, 200, 500);
+  //doors
+  exit(240, 325);
+  exit(240, 100);
+  exit(450, 40);
+  exit(450, 215);
+  exit(450, 390);
+  fill(0);
+  rect(325, 0, 50, 30);
+  fill(94, 76, 38);
+  stroke(217, 153, 35);
+  strokeWeight(1);
+  //collision for this room
+  checkCollisionsFloor(250, 30, 200, 470);
+  stairs.draw();
+}
+
+function exit(x, y) {
+  fill(94, 76, 38);
+  rect(x, y, 10, 60);
+}
+// Stairs as an object needed for exit interaction
+let stairs = {
+  position: {
+    x: 325,
+    y: 10,
+  },
+  size: {
+    width: 50,
+    height: 30,
+  },
+  color: [94, 76, 38],
+  draw: function () {
+    fill(this.color[0], this.color[1], this.color[2]);
+    rect(this.position.x, this.position.y, this.size.width, this.size.height);
+  },
+};
+function isNearStairs() {
+  let distance = dist(
+    characterX,
+    characterY,
+    stairs.position.x + stairs.size.width / 2,
+    stairs.position.y + stairs.size.height / 2
+  );
+  return distance < 50;
+}
+function displayStairsPrompt() {
+  textAlign(CENTER);
+  fill(255);
+  textSize(20);
+  text("Press 'X' to go downstairs.", 350, 480);
+}
+// ANOTHER ROOM - ENTRY ROOM
+function displayEntryRoom() {
+  strokeWeight();
+  background(0);
+  // room block
+  fill(42, 35, 45);
+  rect(180, 100, 300);
+  //floor
+  strokeWeight(0);
+  fill(32, 32, 32);
+  rect(180, 220, 300, 180);
+  //rug
+  fill(145, 56, 49);
+  rect(261, 280, 120, 50);
+  rect(254, 280, 7, 4);
+  rect(254, 290, 7, 4);
+  rect(254, 302, 7, 4);
+  rect(254, 315, 7, 4);
+  rect(254, 326, 7, 4);
+  rect(380, 280, 7, 4);
+  rect(380, 290, 7, 4);
+  rect(380, 304, 7, 4);
+  rect(380, 315, 7, 4);
+  rect(380, 326, 7, 4);
+  //wardrobe
+  fill(92, 64, 51);
+  rect(272, 185, 70, 40);
+  strokeWeight(2);
+  stroke(128, 70, 27);
+  rect(272, 190, 70, 10);
+  rect(272, 210, 70, 10);
+  rect(305, 194, 3, 3);
+  rect(305, 214, 3, 3);
+  //chair
+  fill(123, 63, 0);
+  strokeWeight(1);
+  stroke(110, 38, 14);
+  rect(243, 199, 2, 8);
+  rect(258, 199, 2, 8);
+  rect(242, 192, 20, 8);
+  rect(243, 209, 2, 12);
+  rect(258, 209, 2, 12);
+  rect(242, 206, 20, 5);
+  //stairs
+  strokeWeight(1);
+  rect(390, 215, 90, 15);
+  rect(400, 200, 80, 15);
+  rect(410, 185, 70, 15);
+  rect(420, 170, 60, 15);
+  rect(430, 155, 50, 15);
+  rect(440, 140, 40, 15);
+  rect(450, 125, 30, 15);
+  rect(460, 110, 20, 15);
+  rect(465, 99, 15, 11);
+  //painting
+  fill(47, 79, 79);
+  rect(285, 140, 40, 30);
+  fill(0);
+  strokeWeight(0);
+  rect(300, 148, 8, 15);
+  fill(255, 255, 255);
+  rect(302, 154, 5, 5);
+  rect(302, 150, 5, 7);
+  fill("red");
+  rect(302, 158, 6, 12);
+  fill(0);
+  rect(305, 152, 2, 2);
+  rect(302, 152, 2, 2);
+    //doorsExit
+  fill("brown");
+  rect(309, 399, 60, 10);
+  
+  checkCollisionsFloor(180, 220, 300, 180);
 }
