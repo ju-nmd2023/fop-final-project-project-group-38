@@ -3,17 +3,18 @@ function setup() {
   background(0);
 }
 
+let picture = "";
+function preload() {
+  picture = loadImage("items/polaroid_photo.png");
+}
+
 function polaroidBig() {
   noStroke();
   //picture frame itself
   push();
-  fill(255);
-  translate(300, 0);
-  rotate(PI / 6);
-  rect(0, 0, 350, 375);
-  fill(0, 0, 255);
-  rect(25, 25, 300);
-  // insert image
+  //translate(300, 0);
+  //rotate(PI / 6);
+  image(picture, 175, 50, 350, 400);
   pop();
 }
 
