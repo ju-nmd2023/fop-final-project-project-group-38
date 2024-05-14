@@ -366,6 +366,7 @@ function displayStairsPrompt() {
 }
 // ANOTHER ROOM - ENTRY ROOM
 function displayEntryRoom() {
+  strokeWeight();
   background(0);
   // room block
   fill(42, 35, 45);
