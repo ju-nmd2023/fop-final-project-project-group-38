@@ -432,6 +432,9 @@ function displayEntryRoom() {
   fill(0);
   rect(305, 152, 2, 2);
   rect(302, 152, 2, 2);
-
+    //doorsExit
+  fill("brown");
+  rect(309, 399, 60, 10);
+  
   checkCollisionsFloor(180, 220, 300, 180);
 }
