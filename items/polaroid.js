@@ -10,10 +10,7 @@ function preload() {
 
 function polaroidBig() {
   noStroke();
-  //picture frame itself
   push();
-  //translate(300, 0);
-  //rotate(PI / 6);
   image(picture, 175, 50, 350, 400);
   pop();
 }

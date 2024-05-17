@@ -2,6 +2,7 @@ let gameStarted = false;
 let startButton;
 let characterX = 210; //starting position of aiden x
 let characterY = 200;
+let playerState = 0;
 let bedroomVisible = true;
 let hallwayVisible = false;
 
@@ -30,59 +31,107 @@ function draw() {
     }
     door.draw(); //door object
     updateCharacterPosition(); //character movement
-    drawCharacter(characterX, characterY); //character with X and Y needed for movement
+    drawCharacter(characterX, characterY, playerState); //character with X and Y needed for movement
     if (isNearDoor()) {
-      displayDoorPrompt();
+      trial.write(test, "yes");
     }
   }
 }
 
+let testTwo =
+  "Tonight the music seems so loud I wish that we could loose this crows. Maybe it'*s better this way, we'd hurt each other with the things we'd want to say. We could have been so good together, we could have danced this dance forever but now you're gone again and say Please babe";
+let test =
+  "Wait a minute, i think I left my conscience on your front door step, wait a minute i think i left my conscience in the sixth dimension. Hold on when I'm in there feel my hearts attention.You left your diary at my house and I read those pages you really love me baby. ";
 let i = 0;
+let y = -50;
 let subString = "";
 let choice1 = "";
 let choice2 = "";
-function dialogue(str) {
-  fill(0);
-  strokeWeight(2);
-  stroke(255);
-  rect(40, 315, 620, 150);
 
-  fill(255);
-  noStroke();
-  textSize(12);
-  textAlign(LEFT);
-  textFont("Courier");
-  textWrap(CHAR);
+class dialogue {
+  constructor(starter, choice1, choice2, ender1, ender2) {
+    this.starter = starter;
+    this.choice1 = choice1;
+    this.choice2 = choice2;
+    this.ender1 = ender1;
+    this.ender2 = ender2;
+  }
 
-  let y = 395;
+  write(str, choices) {
+    //box & font style
+    fill(0);
+    strokeWeight(2);
+    stroke(255);
+    rect(40, 315, 620, 150);
 
-  setTimeout(function () {
-    if (i < str.length) {
-      subString += str[i];
-      console.log(i);
-      i++;
+    fill(255);
+    noStroke();
+    textSize(12);
+    textAlign(LEFT);
+    textFont("Courier");
+    textWrap(CHAR);
+
+    // inspired by https://www.youtube.com/watch?v=4dWb1x-of7I&t=209s
+    let delay = setTimeout(function () {
+      if (i < str.length) {
+        subString += str[i];
+        i++;
+      }
+    }, 1500);
+    text(subString, 50, 325, 600, 375);
+    if (i === str.length && choices === "yes") {
+      clearTimeout(delay);
+      return this.choices();
+    } else if (i === str.length && choices === "no") {
+      clearTimeout(delay);
+      return console.log("done");
     }
-  }, 1500);
-  text(subString, 50, 325, 600, 375);
-  if (i === str.length) {
-    choice1 = "Angelica...";
-    choice2 = "I'm not here for you...";
-    if (key === "s") {
-      y += 25;
-    } else if (key === "w") {
+  }
+
+  choices() {
+    let that = this;
+    //box & font style
+    fill(0);
+    strokeWeight(2);
+    stroke(255);
+    rect(40, 315, 620, 150);
+    noStroke();
+
+    if (keyCode === 83) {
+      y = 420;
+    } else if (keyCode === 87) {
       y = 395;
     }
     fill(255, 0, 255, 50);
     rect(40, y, 620, 20);
-  }
-  fill(255);
-  text(choice1, 50, 400, 600, 50);
-  text(choice2, 50, 425, 600, 50);
 
-  if (keyCode === 13) {
-    subString = "";
+    fill(255);
+    text(subString, 50, 325, 600, 375);
+    text(that.choice1, 50, 400, 600, 50);
+    text(that.choice2, 50, 425, 600, 50);
+
+    if (keyCode === 13 && y === 395) {
+      subString = "";
+      i = 0;
+      return that.write("he-hewwo mwister obwama", "no");
+    } else if (keyCode === 13 && y === 420) {
+      subString = "";
+      i = 0;
+      return that.write(that.ender2);
+    }
   }
+
+  history() {}
 }
+
+let trial = new dialogue(
+  test,
+  "Angelica...",
+  "Eliza-",
+  "I'm not here for you",
+  "dumbass motherfucker that is not the line"
+);
+
 //starting screen
 function displayMenu() {
   textAlign(CENTER);
@@ -226,59 +275,104 @@ let door = {
 };
 
 function drawCharacter(x, y) {
-  //Aiden look
-  fill(0); //tshirt actually
-  strokeWeight(0);
-  //body
-  rect(x, y, 20, 14);
-  //head
-  fill(255, 228, 181); //skin
-  rect(x, y - 15, 20, 15);
-  //legs
-  rect(x, y + 20, 5, 10);
-  rect(x + 15, y + 20, 5, 10);
-  //hands
-  rect(x - 3, y + 5, 3, 10);
-  rect(x + 20, y + 5, 3, 10);
-  //shoes
-  fill(0);
-  rect(x, y + 26, 5, 5);
-  rect(x + 15, y + 26, 5, 5);
-  //pants
-  fill(0, 102, 51);
-  rect(x, y + 14, 20, 4);
-  rect(x, y + 18, 9, 3);
-  rect(x + 11, y + 18, 9, 3);
-  //eyes
-  fill(0);
-  rect(x + 4, y - 10, 2, 2);
-  rect(x + 14, y - 10, 2, 2);
-  //hair
-  rect(x - 1, y - 15, 3, 5);
-  rect(x + 18, y - 15, 3, 5);
-  rect(x + 14, y - 15, 4, 4);
-  rect(x + 1, y - 15, 4, 4);
-  //hat
-  fill("red");
-  rect(x, y - 20, 20, 4);
-  rect(x - 1, y - 17, 10, 4);
-  rect(x + 11, y - 17, 10, 4);
-  //mouth
-  fill(0);
-  rect(x + 8, y - 5, 4, 1);
-  //tshirt image
-  fill("yellow");
-  rect(x + 6, y + 4, 2, 2);
-  rect(x + 7, y + 4, 2, 7);
-  rect(x + 10, y + 4, 4, 2);
-  rect(x + 10, y + 6, 2, 2);
-  rect(x + 12, y + 7, 1, 1);
-  rect(x + 12, y + 8, 1, 2);
-  rect(x + 10, y + 9, 3, 2);
-  //sleeves
-  fill(0);
-  rect(x + 20, y + 2, 3, 6);
-  rect(x - 3, y + 2, 3, 6);
+  if (playerState === 0) {
+    //Aiden look
+    fill(0); //tshirt actually
+    strokeWeight(0);
+    //body
+    rect(x, y, 20, 14);
+    //head
+    fill(255, 228, 181); //skin
+    rect(x, y - 15, 20, 15);
+    //legs
+    rect(x, y + 20, 5, 10);
+    rect(x + 15, y + 20, 5, 10);
+    //hands
+    rect(x - 3, y + 5, 3, 10);
+    rect(x + 20, y + 5, 3, 10);
+    //shoes
+    fill(0);
+    rect(x, y + 26, 5, 5);
+    rect(x + 15, y + 26, 5, 5);
+    //pants
+    fill(0, 102, 51);
+    rect(x, y + 14, 20, 4);
+    rect(x, y + 18, 9, 3);
+    rect(x + 11, y + 18, 9, 3);
+    //eyes
+    fill(0);
+    rect(x + 4, y - 10, 2, 2);
+    rect(x + 14, y - 10, 2, 2);
+    //hair
+    rect(x - 1, y - 15, 3, 5);
+    rect(x + 18, y - 15, 3, 5);
+    rect(x + 14, y - 15, 4, 4);
+    rect(x + 1, y - 15, 4, 4);
+    //hat
+    fill("red");
+    rect(x, y - 20, 20, 4);
+    rect(x - 1, y - 17, 10, 4);
+    rect(x + 11, y - 17, 10, 4);
+    //mouth
+    fill(0);
+    rect(x + 8, y - 5, 4, 1);
+    //tshirt image
+    fill("yellow");
+    rect(x + 6, y + 4, 2, 2);
+    rect(x + 7, y + 4, 2, 7);
+    rect(x + 10, y + 4, 4, 2);
+    rect(x + 10, y + 6, 2, 2);
+    rect(x + 12, y + 7, 1, 1);
+    rect(x + 12, y + 8, 1, 2);
+    rect(x + 10, y + 9, 3, 2);
+    //sleeves
+    fill(0);
+    rect(x + 20, y + 2, 3, 6);
+    rect(x - 3, y + 2, 3, 6);
+  } else if (playerState === 1) {
+    //CAT
+    fill("grey");
+    strokeWeight(0);
+    //face
+    rect(x, y, 15, 10);
+    rect(x - 2, y + 3, 3, 4);
+    rect(x + 14, y + 3, 3, 4);
+    //ears
+    rect(x, y - 5, 4, 6);
+    rect(x + 10, y - 5, 4, 6);
+    fill("white");
+    rect(x + 11, y - 4, 2, 3);
+    rect(x + 1, y - 4, 2, 3);
+    //body
+    fill("grey");
+    rect(x + 4, y + 10, 20, 10);
+    //legs
+    rect(x + 4, y + 16, 3, 10);
+    rect(x + 8, y + 16, 3, 10);
+    rect(x + 17, y + 16, 3, 10);
+    rect(x + 21, y + 16, 3, 10);
+    //tail
+    rect(x + 23, y + 10, 4, 2);
+    rect(x + 26, y + 8, 3, 2);
+    rect(x + 28, y + 6, 3, 2);
+    fill("white");
+    rect(x + 29, y + 5, 2, 2);
+    //nose
+    fill(0);
+    rect(x + 6, y + 5, 2, 2);
+    //eyes
+    rect(x + 3, y + 3, 2, 2);
+    rect(x + 9, y + 3, 2, 2);
+    //mouth
+    rect(x + 5, y + 7, 1, 1);
+    rect(x + 8, y + 7, 1, 1);
+  }
+  if (keyIsDown(84) && playerState === 0) {
+    console.log("this isn't supposed to loop");
+    playerState = 1;
+  } else if (keyIsDown(84) && playerState === 1) {
+    playerState = 0;
+  }
 }
 //MOVEMENT
 function updateCharacterPosition() {

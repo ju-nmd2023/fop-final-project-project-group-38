@@ -8,6 +8,7 @@ let testTwo =
 let test =
   "Wait a minute, i think I left my conscience on your front door step, wait a minute i think i left my conscience in the sixth dimension. Hold on when I'm in there feel my hearts attention.You left your diary at my house and I read those pages you really love me baby. ";
 let i = 0;
+let y = -50;
 let subString = "";
 let choice1 = "";
 let choice2 = "";
@@ -16,7 +17,8 @@ let choice2 = "";
   dialogue("insert text here");
 }
 */
-function dialogue(str) {
+
+function monologue(str) {
   fill(0);
   strokeWeight(2);
   stroke(255);
@@ -60,6 +62,92 @@ function dialogue(str) {
   }
 }
 
+class dialogue {
+  constructor(starter, choice1, choice2, ender1, ender2) {
+    this.starter = starter;
+    this.choice1 = choice1;
+    this.choice2 = choice2;
+    this.ender1 = ender1;
+    this.ender2 = ender2;
+  }
+
+  write(str, choices) {
+    //box & font style
+    fill(0);
+    strokeWeight(2);
+    stroke(255);
+    rect(40, 315, 620, 150);
+
+    fill(255);
+    noStroke();
+    textSize(12);
+    textAlign(LEFT);
+    textFont("Courier");
+    textWrap(CHAR);
+
+    // inspired by https://www.youtube.com/watch?v=4dWb1x-of7I&t=209s
+    let delay = setTimeout(function () {
+      if (i < str.length) {
+        subString += str[i];
+        i++;
+      }
+    }, 1500);
+    text(subString, 50, 325, 600, 375);
+    if (i === str.length && choices === "yes") {
+      clearTimeout(delay);
+      return this.choices();
+    } else if (i === str.length && choices === "no") {
+      clearTimeout(delay);
+      return console.log("done");
+    }
+  }
+
+  choices() {
+    let that = this;
+    //box & font style
+    fill(0);
+    strokeWeight(2);
+    stroke(255);
+    rect(40, 315, 620, 150);
+    noStroke();
+
+    if (keyCode === 83) {
+      y = 420;
+    } else if (keyCode === 87) {
+      y = 395;
+    }
+    fill(255, 0, 255, 50);
+    rect(40, y, 620, 20);
+
+    fill(255);
+    text(subString, 50, 325, 600, 375);
+    text(that.choice1, 50, 400, 600, 50);
+    text(that.choice2, 50, 425, 600, 50);
+
+    if (keyCode === 13 && y === 395) {
+      subString = "";
+      i = 0;
+      return that.write("he-hewwo mwister obwama", "no");
+    } else if (keyCode === 13 && y === 420) {
+      subString = "";
+      i = 0;
+      return that.write(that.ender2);
+    }
+  }
+
+  history() {}
+}
+
+let trial = new dialogue(
+  test,
+  "Angelica...",
+  "Eliza-",
+  "I'm not here for you",
+  "dumbass motherfucker that is not the line"
+);
+
 function draw() {
-  dialogue(testTwo);
+  //dialogue(testTwo);
+  trial.write(test, "yes");
+  //trial.write(trial.ender1, "no");
 }
