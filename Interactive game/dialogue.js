@@ -71,8 +71,7 @@ class dialogue {
     this.ender2 = ender2;
   }
 
-  write(str, choices) {
-    //box & font style
+  dialogueBox() {
     fill(0);
     strokeWeight(2);
     stroke(255);
@@ -84,58 +83,66 @@ class dialogue {
     textAlign(LEFT);
     textFont("Courier");
     textWrap(CHAR);
-
-    // inspired by https://www.youtube.com/watch?v=4dWb1x-of7I&t=209s
-    let delay = setTimeout(function () {
-      if (i < str.length) {
-        subString += str[i];
-        i++;
-      }
-    }, 1500);
-    text(subString, 50, 325, 600, 375);
-    if (i === str.length && choices === "yes") {
-      clearTimeout(delay);
-      return this.choices();
-    } else if (i === str.length && choices === "no") {
-      clearTimeout(delay);
-      return console.log("done");
-    }
   }
 
-  choices() {
+  write() {
     let that = this;
     //box & font style
-    fill(0);
-    strokeWeight(2);
-    stroke(255);
-    rect(40, 315, 620, 150);
-    noStroke();
-
-    if (keyCode === 83) {
-      y = 420;
-    } else if (keyCode === 87) {
-      y = 395;
+    this.dialogueBox();
+    //typing the string
+    if (i < that.starter.length) {
+      subString += that.starter[i];
+      i++;
     }
-    fill(255, 0, 255, 50);
-    rect(40, y, 620, 20);
-
-    fill(255);
     text(subString, 50, 325, 600, 375);
-    text(that.choice1, 50, 400, 600, 50);
-    text(that.choice2, 50, 425, 600, 50);
+    //adding choices if any are given
+    if (i === that.starter.length && that.choice1 !== "") {
+      if (keyCode === 83) {
+        y = 420;
+      } else if (keyCode === 87) {
+        y = 395;
+      }
+      //highlight box
+      fill(255, 0, 255, 50);
+      rect(40, y, 620, 20);
+      //displayed text
+      fill(255);
+      text(subString, 50, 325, 600, 375);
+      text(that.choice1, 50, 400, 600, 50);
+      text(that.choice2, 50, 425, 600, 50);
 
-    if (keyCode === 13 && y === 395) {
+      //choosing selected choice
+      if (keyCode === 13 && y === 395) {
+        that.starter = "";
+        subString = "";
+        i = 0;
+        while (i < that.ender1.length) {
+          subString += that.ender1[i];
+          i++;
+          console.log(i);
+        }
+        text(subString, 50, 325, 600, 375);
+      } else if (keyCode === 13 && y === 420) {
+        that.starter = "";
+        subString = "";
+        i = 0;
+        while (i < that.ender2.length) {
+          subString += that.ender2[i];
+          i++;
+        }
+        text(subString, 50, 325, 600, 375);
+      }
+    } else if (that.starter.length && that.choice1 === "" && keyCode === 13) {
       subString = "";
+      that.starter = "";
       i = 0;
-      return that.write("he-hewwo mwister obwama", "no");
-    } else if (keyCode === 13 && y === 420) {
-      subString = "";
-      i = 0;
-      return that.write(that.ender2);
+      while (subString !== that.ender1) {
+        subString += this.ender1[i];
+        i++;
+        text(subString, 50, 325, 600, 375);
+      }
     }
   }
-
-  history() {}
 }
 
 let trial = new dialogue(
@@ -148,6 +155,7 @@ let trial = new dialogue(
 
 function draw() {
   //dialogue(testTwo);
-  trial.write(test, "yes");
+  //trial.write(test, "yes");
   //trial.write(trial.ender1, "no");
+  trial.write();
 }

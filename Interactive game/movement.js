@@ -3,6 +3,7 @@ let startButton;
 let characterX = 210; //starting position of aiden x
 let characterY = 200;
 let playerState = 0;
+let convo = 0;
 let bedroomVisible = true;
 let hallwayVisible = false;
 
@@ -32,14 +33,12 @@ function draw() {
     door.draw(); //door object
     updateCharacterPosition(); //character movement
     drawCharacter(characterX, characterY, playerState); //character with X and Y needed for movement
-    if (isNearDoor()) {
-      trial.write(test, "yes");
+    if (isNearDoor() && convo === 0) {
+      trial2.write();
     }
   }
 }
 
-let testTwo =
-  "Tonight the music seems so loud I wish that we could loose this crows. Maybe it'*s better this way, we'd hurt each other with the things we'd want to say. We could have been so good together, we could have danced this dance forever but now you're gone again and say Please babe";
 let test =
   "Wait a minute, i think I left my conscience on your front door step, wait a minute i think i left my conscience in the sixth dimension. Hold on when I'm in there feel my hearts attention.You left your diary at my house and I read those pages you really love me baby. ";
 let i = 0;
@@ -57,8 +56,7 @@ class dialogue {
     this.ender2 = ender2;
   }
 
-  write(str, choices) {
-    //box & font style
+  dialogueBox() {
     fill(0);
     strokeWeight(2);
     stroke(255);
@@ -70,58 +68,65 @@ class dialogue {
     textAlign(LEFT);
     textFont("Courier");
     textWrap(CHAR);
-
-    // inspired by https://www.youtube.com/watch?v=4dWb1x-of7I&t=209s
-    let delay = setTimeout(function () {
-      if (i < str.length) {
-        subString += str[i];
-        i++;
-      }
-    }, 1500);
-    text(subString, 50, 325, 600, 375);
-    if (i === str.length && choices === "yes") {
-      clearTimeout(delay);
-      return this.choices();
-    } else if (i === str.length && choices === "no") {
-      clearTimeout(delay);
-      return console.log("done");
-    }
   }
 
-  choices() {
+  write() {
     let that = this;
     //box & font style
-    fill(0);
-    strokeWeight(2);
-    stroke(255);
-    rect(40, 315, 620, 150);
-    noStroke();
-
-    if (keyCode === 83) {
-      y = 420;
-    } else if (keyCode === 87) {
-      y = 395;
+    this.dialogueBox();
+    //typing the string
+    if (i < that.starter.length) {
+      subString += that.starter[i];
+      i++;
     }
-    fill(255, 0, 255, 50);
-    rect(40, y, 620, 20);
-
-    fill(255);
     text(subString, 50, 325, 600, 375);
-    text(that.choice1, 50, 400, 600, 50);
-    text(that.choice2, 50, 425, 600, 50);
+    //adding choices if any are given
+    if (i === that.starter.length && that.choice1 !== "") {
+      if (keyCode === 83) {
+        y = 420;
+      } else if (keyCode === 87) {
+        y = 395;
+      }
+      //highlight box
+      fill(255, 0, 255, 50);
+      rect(40, y, 620, 20);
+      //displayed text
+      fill(255);
+      text(subString, 50, 325, 600, 375);
+      text(that.choice1, 50, 400, 600, 50);
+      text(that.choice2, 50, 425, 600, 50);
 
-    if (keyCode === 13 && y === 395) {
+      //choosing selected choice
+      if (keyCode === 13 && y === 395) {
+        that.starter = "";
+        subString = "";
+        i = 0;
+        while (i < that.ender1.length) {
+          subString += that.ender1[i];
+          i++;
+        }
+        text(subString, 50, 325, 600, 375);
+      } else if (keyCode === 13 && y === 420) {
+        that.starter = "";
+        subString = "";
+        i = 0;
+        while (i < that.ender2.length) {
+          subString += that.ender2[i];
+          i++;
+        }
+        text(subString, 50, 325, 600, 375);
+      }
+    } else if (that.starter.length && that.choice1 === "" && keyCode === 13) {
       subString = "";
+      that.starter = "";
       i = 0;
-      return that.write("he-hewwo mwister obwama", "no");
-    } else if (keyCode === 13 && y === 420) {
-      subString = "";
-      i = 0;
-      return that.write(that.ender2);
+      while (subString !== that.ender1) {
+        subString += this.ender1[i];
+        i++;
+        text(subString, 50, 325, 600, 375);
+      }
     }
   }
-
-  history() {}
 }
 
 let trial = new dialogue(
@@ -130,6 +135,13 @@ let trial = new dialogue(
   "Eliza-",
   "I'm not here for you",
   "dumbass motherfucker that is not the line"
+);
+let trial2 = new dialogue(
+  "It's okay, you cam just unfreeze it",
+  "No I can't, I- I don't know how",
+  "Damn Ig",
+  "Yes, you can, I know you can",
+  "huh"
 );
 
 //starting screen
@@ -368,7 +380,6 @@ function drawCharacter(x, y) {
     rect(x + 8, y + 7, 1, 1);
   }
   if (keyIsDown(84) && playerState === 0) {
-    console.log("this isn't supposed to loop");
     playerState = 1;
   } else if (keyIsDown(84) && playerState === 1) {
     playerState = 0;
