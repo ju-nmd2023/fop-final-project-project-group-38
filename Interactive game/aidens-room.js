@@ -499,6 +499,7 @@ function displayEntryRoom() {
   fill("brown");
   rect(309, 399, 60, 10);
 
+translate(10,12); //moving cat a bit
   //CAT black
   fill("black");
   strokeWeight(0);
