@@ -57,14 +57,15 @@ function draw() {
     if (isNearStairs() && !entryRoomVisible && hallwayVisible) {
       displayStairsPrompt();
       if (key === "x" || key === "X") {
+        hallwayVisible = false;
         entryRoomVisible = true;
       }
     }
     if (isNearEntryDoor() && !houseAreaVisible && entryRoomVisible) {
       displayDoorPrompt();
       if (key === "x" || key === "X") {
+        entryRoomVisible = false;
         houseAreaVisible = true;
-        checkCollisionsFloor.disable;
       }
     }
   }
@@ -199,6 +200,7 @@ function bedroomAiden() {
   rect(226, 130, 2);
   //collision for this room
   checkCollisionsFloor(180, 196, 300, 204);
+  //se
 }
 // door as an object have to transform it with class---constructor
 let door = {
@@ -320,7 +322,6 @@ function drawCharacter(x, y) {
     rect(x + 8, y + 7, 1, 1);
   }
   if (keyIsDown(84) && characterState === 0) {
-    console.log("this isn't supposed to loop");
     characterState = 1;
   } else if (keyIsDown(84) && characterState === 1) {
     characterState = 0;
@@ -530,7 +531,7 @@ function displayEntryRoom() {
   rect(203, 187, 3, 3);
   rect(209, 187, 3, 3);
 
-  checkCollisionsFloor(150, 220, 350, 180);
+  checkCollisionsFloor(180, 220, 300, 180);
 }
 
 //door in entry room, needed new object
@@ -562,6 +563,7 @@ function isNearEntryDoor() {
 /* import function drawHouseArea from "house-area.js;
 {console.log ("loaded")} */ //for importing code from house-area.js but doesnt work
 function displayHouseArea() {
+  push();
   background(120, 132, 5);
   scale(1.2);
   // Move the entire house 10 pixels to the right
@@ -828,7 +830,8 @@ function displayHouseArea() {
   rect(720, 120, 10, 40);
   rect(840, 110, 10, 60);
   rect(850, 120, 10, 40);
+  pop();
 
   //collision works from other room
-  checkCollisionsFloor(0);
+  checkCollisionsFloor(0, 200, 700, 300);
 }
