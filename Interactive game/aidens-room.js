@@ -44,7 +44,7 @@ function draw() {
       displayHouseArea();
     }
     updateCharacterPosition(); //character movement
-    drawCharacter(characterX, characterY, characterState); //character with X and Y needed for movement
+    drawCharacter(characterX, characterY, characterState);
     // transition from bedroom to hallway
     if (isNearDoor() && !hallwayVisible) {
       displayDoorPrompt();
@@ -64,6 +64,7 @@ function draw() {
       displayDoorPrompt();
       if (key === "x" || key === "X") {
         houseAreaVisible = true;
+        checkCollisionsFloor.disable;
       }
     }
   }
@@ -557,6 +558,9 @@ function isNearEntryDoor() {
   );
   return distance < 50;
 }
+
+/* import function drawHouseArea from "house-area.js;
+{console.log ("loaded")} */ //for importing code from house-area.js but doesnt work
 function displayHouseArea() {
   background(120, 132, 5);
   scale(1.2);
@@ -824,4 +828,7 @@ function displayHouseArea() {
   rect(720, 120, 10, 40);
   rect(840, 110, 10, 60);
   rect(850, 120, 10, 40);
+
+  //collision works from other room
+  checkCollisionsFloor(0);
 }
