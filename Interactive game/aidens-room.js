@@ -14,9 +14,11 @@ let i = 0;
 //sounds
 let clickSound = new Audio("play.mp3");
 //overlays
-let picture = ("polaroid_photo.png");
+let picture = "polaroid_photo.png";
 let overlayDisplayed = false;
 let letterImg;
+let pictureDisplayed = false;
+let polaroidImg;
 
 function setup() {
   createCanvas(700, 500);
@@ -51,6 +53,9 @@ function draw() {
     }
     if (entryRoomVisible) {
       displayEntryRoom(); // Display the entry room if it's visible
+      if (pictureDisplayed) {
+        displayPicture();
+      }
     }
     if (houseAreaVisible) {
       displayHouseArea();
@@ -87,7 +92,7 @@ function displayMenu() {
   textAlign(CENTER);
   fill(255);
   textSize(15);
-  textFont('Montserrat');
+  textFont("Montserrat");
   let introduction =
     "Aiden is a boy, whose beloved sister disapears one day,\n without saying last goodbye.\n The only sign is the letter left on the desk in his room.\n Aiden has to find out what happened and where is Ellie...";
   setTimeout(function () {
@@ -241,17 +246,32 @@ let door = {
 //LETTER
 function preload() {
   letterImg = loadImage("letter.png");
+  polaroidImg = loadImage("polaroid_photo.png");
 }
 function mousePressed() {
   if (bedroomVisible && mouseButton === LEFT) {
     if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
       overlayDisplayed = !overlayDisplayed;
+    } else if (overlayDisplayed) {
+      //exit the overlay if its displayed and the mouse is clicked outside of it
+      overlayDisplayed = false;
+    }
+  }
+  if (entryRoomVisible && mouseButton === LEFT) {
+    if (mouseX >= 200 && mouseX <= 400 && mouseY >= 50 && mouseY <= 350) {
+      pictureDisplayed = !pictureDisplayed;
+    } else if (overlayDisplayed) {
+      overlayDisplayed = false;
     }
   }
 }
 function displayOverlay() {
-  image(letterImg, mouseX, mouseY, 200, 300);
+  image(letterImg, 450, 50, 200, 300);
 }
+function displayPicture() {
+  image(polaroidImg, 450, 50, 250, 300);
+}
+
 //Aiden
 function drawCharacter(x, y) {
   if (characterState === 0) {
@@ -558,9 +578,7 @@ function displayEntryRoom() {
   rect(209, 187, 3, 3);
 
   checkCollisionsFloor(180, 220, 300, 180);
-  
 }
-
 
 //door in entry room, needed new object
 let entrydoor = {
