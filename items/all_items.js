@@ -227,6 +227,26 @@ function fishRemains(x, y) {
   fill(0);
   rect(x - 30, y - 10, 5);
 }
+let girl = {
+  position: {
+    x: 50,
+    y: 450,
+  },
+};
+
+let cat = {
+  position: {
+    x: 350,
+    y: 250,
+  },
+};
+
+let pond = {
+  position: {
+    x: 630,
+    y: 430,
+  },
+};
 
 export {
   preload,
@@ -236,4 +256,7 @@ export {
   bonbon,
   fish,
   fishRemains,
+  girl,
+  cat,
+  pond,
 };
