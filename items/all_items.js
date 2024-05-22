@@ -5,11 +5,6 @@ function preload() {
   picture = loadImage("items/polaroid_photo.png");
 }
 
-function setup() {
-  createCanvas(700, 500);
-  background(0);
-}
-
 function cloverInLetter() {
   fill(100);
   noStroke();
@@ -235,7 +230,6 @@ function fishRemains(x, y) {
 
 export {
   preload,
-  setup,
   cloverInLetter,
   letter,
   polaroidBig,
