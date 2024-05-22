@@ -243,7 +243,7 @@ let door = {
     rect(this.handlePosition.x, this.handlePosition.y, this.handleSize);
   },
 };
-//LETTER
+//LETTER & Picture overlay when clicking on letter in bedroom and wardobe in entry room
 function preload() {
   letterImg = loadImage("letter.png");
   polaroidImg = loadImage("polaroid_photo.png");
@@ -274,7 +274,7 @@ function displayPicture() {
 
 //Aiden
 function drawCharacter(x, y) {
-  if (characterState === 0) {
+  if (characterState === 0) { //human form of Aiden
     //Aiden look
     fill(0); //tshirt actually
     strokeWeight(0);
@@ -366,7 +366,7 @@ function drawCharacter(x, y) {
     rect(x + 5, y + 7, 1, 1);
     rect(x + 8, y + 7, 1, 1);
   }
-  if (keyIsDown(84) && characterState === 0) {
+  if (keyIsDown(84) && characterState === 0) { //When T key is pressed Aiden transforms into a cat
     characterState = 1;
   } else if (keyIsDown(84) && characterState === 1) {
     characterState = 0;
