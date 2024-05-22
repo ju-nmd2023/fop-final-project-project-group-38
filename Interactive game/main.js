@@ -70,7 +70,6 @@ function draw() {
     }
   }
 }
-
 //starting screen
 function displayMenu() {
   textAlign(CENTER);
@@ -321,9 +320,12 @@ function drawCharacter(x, y) {
     rect(x + 5, y + 7, 1, 1);
     rect(x + 8, y + 7, 1, 1);
   }
-  if (keyIsDown(84) && characterState === 0) {
+}
+//TRANSFORMATION
+function keyPressed() {
+  if (key === "t" && characterState === 0) {
     characterState = 1;
-  } else if (keyIsDown(84) && characterState === 1) {
+  } else if (key === "t" && characterState === 1) {
     characterState = 0;
   }
 }
@@ -499,7 +501,7 @@ function displayEntryRoom() {
   fill("brown");
   rect(309, 399, 60, 10);
 
-translate(10,12); //moving cat a bit
+  translate(10, 12); //moving cat a bit
   //CAT black
   fill("black");
   strokeWeight(0);

@@ -8,7 +8,7 @@ function setup() {
   background(0);
 }
 
-function clover() {
+function cloverInLetter() {
   fill(100);
   noStroke();
   rect(400, 378, 2, 6);
@@ -83,7 +83,7 @@ function letter() {
     250,
     350
   );
-  clover();
+  cloverInLetter();
 }
 
 function draw() {
