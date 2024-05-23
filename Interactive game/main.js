@@ -7,7 +7,7 @@ import * as items from "/items/all_items.js";
 let polaroidImg;
 let letterImg;
 //sounds
-let clickSound = new Audio("/Interactive game/intro.mp3");
+let clickSound = new Audio("/Interactive game/playbutton.mp3");
 //game start
 let gameStarted = false;
 let startButton;
@@ -16,6 +16,7 @@ let bedroomVisible = true;
 let hallwayVisible = false;
 let entryRoomVisible = false;
 let houseAreaVisible = false;
+let lastAreaVisible = false;
 //variables for dialogues
 let subStringStart = "";
 let k = 0;
@@ -31,7 +32,7 @@ function setup() {
   startButton = createButton("Play");
   startButton.position(700, 500);
   startButton.mousePressed(startGame);
-  clickSound = new Audio("Interactive game/playbutton.mp3");
+  clickSound;
   clickSound.volume = 0.1;
 }
 window.setup = setup;
@@ -50,6 +51,23 @@ function draw() {
     if (bedroomVisible) {
       rooms.bedroomAiden();
       player.checkCollisionsFloor(180, 196, 300, 204);
+      //interaction
+      if (
+        dialogues.isNearDialogue(items.car) &&
+        !dialogues.checkDialogueHistory("car")
+      ) {
+        dialogues.displayDialoguePrompt();
+        if (key === "e") {
+          dialogueActive = true;
+        }
+        if (dialogueActive === true) {
+          dialogues.car.execute();
+          if (!dialogues.car.execute()) {
+            dialogueActive = false;
+          }
+        }
+      }
+      //letter
       if (overlayDisplayed) {
         displayOverlay();
       }
@@ -63,6 +81,23 @@ function draw() {
     if (entryRoomVisible) {
       rooms.displayEntryRoom(); // Display the entry room if it's visible
       player.checkCollisionsFloor(180, 220, 300, 180);
+      //interaction
+      if (
+        dialogues.isNearDialogue(items.cat1) &&
+        !dialogues.checkDialogueHistory("cat1")
+      ) {
+        dialogues.displayDialoguePrompt();
+        if (key === "e") {
+          dialogueActive = true;
+        }
+        if (dialogueActive === true) {
+          dialogues.cat1.execute();
+          if (!dialogues.cat1.execute()) {
+            dialogueActive = false;
+          }
+        }
+      }
+      //Polaroid
       if (pictureDisplayed) {
         displayPicture();
       }
@@ -70,18 +105,32 @@ function draw() {
     if (houseAreaVisible) {
       rooms.displayHouseArea();
       player.checkCollisionsFloor(0, 200, 700, 300);
-      //CONTINUE HERE PLS: check aiden state THEN which trigger
+      //interaction
       if (
         dialogues.isNearDialogue(items.girl) &&
-        !dialogues.checkDialogueHistory("girl1")
+        !dialogues.checkDialogueHistory("girl")
       ) {
         dialogues.displayDialoguePrompt();
         if (key === "e") {
           dialogueActive = true;
         }
         if (dialogueActive === true) {
-          dialogues.girl1.execute();
-          if (!dialogues.girl1.execute()) {
+          dialogues.girl.execute();
+          if (!dialogues.girl.execute()) {
+            dialogueActive = false;
+          }
+        }
+      } else if (
+        dialogues.isNearDialogue(items.cat2) &&
+        !dialogues.checkDialogueHistory("cat2")
+      ) {
+        dialogues.displayDialoguePrompt();
+        if (key === "e") {
+          dialogueActive = true;
+        }
+        if (dialogueActive === true) {
+          dialogues.cat2.execute();
+          if (!dialogues.cat2.execute()) {
             dialogueActive = false;
           }
         }
@@ -108,11 +157,24 @@ function draw() {
         entryRoomVisible = true;
       }
     }
+    //transition from entry room to house area
     if (rooms.isNearEntryDoor() && !houseAreaVisible && entryRoomVisible) {
       rooms.displayDoorPrompt();
       if (key === "x" || key === "X") {
         entryRoomVisible = false;
         houseAreaVisible = true;
+      }
+    }
+    //transition from house area to ???
+    if (
+      dialogues.isNearDialogue(items.lastExit) &&
+      !lastAreaVisible &&
+      houseAreaVisible
+    ) {
+      dialogues.displayDialoguePrompt(true);
+      if (key === "x" || key === "X") {
+        clear();
+        rooms.displayLastArea();
       }
     }
   }

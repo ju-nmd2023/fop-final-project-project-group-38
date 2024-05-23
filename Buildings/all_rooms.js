@@ -549,6 +549,17 @@ function displayHouseArea() {
   rect(605, 191, 1, 1);
   rect(608, 191, 1, 1);
 }
+
+function displayLastArea() {
+  background(0);
+  noStroke();
+  fill(255);
+  textSize(24);
+  textAlign(CENTER);
+  textFont("Courier");
+  textWrap(CHAR);
+  text("To Be Continued...", 350, 284);
+}
 // Stairs as an object needed for exit interaction
 let stairs = {
   position: {
@@ -661,4 +672,5 @@ export {
   displayHallway,
   displayEntryRoom,
   displayHouseArea,
+  displayLastArea,
 };

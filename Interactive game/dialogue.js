@@ -42,18 +42,22 @@ class dialogue {
   history(choice) {
     choices[this.trigger] = choice;
     localStorage["dialogueChoices"] = JSON.stringify(choices);
+    y = -50;
   }
 
   execute() {
     //box
     if (this.position !== "top") {
       a = 315;
+    } else {
+      a = 35;
     }
     this.dialogueBox(a);
     //case one: only one text
     if (this.choice1 === "" && this.reply1 === "") {
       this.write(this.text1, a);
       if (keyCode === 27) {
+        this.history(this.text1);
         dialogueActive = false;
       }
     } else if (this.choice1 === "" && this.reply1 !== "") {
@@ -62,8 +66,10 @@ class dialogue {
       if (keyCode === 13) {
         if (this.text1 !== this.reply1) {
           this.text1 = this.reply1;
+          this.write(this.text1, a);
         }
       } else if (keyCode === 27) {
+        this.history(this.text1);
         dialogueActive = false;
       }
     } else {
@@ -108,82 +114,51 @@ class dialogue {
     }
   }
 }
-let girl1 = new dialogue(
-  "girl1",
-  "I don't remember what the girl was supposed to say, IF you bring me a lollipop and ONLY then.",
-  "Where would I find a Lollipop?",
-  "You are such a brat.",
-  "If I were on the lookout for one, I'd check inside.",
-  "Check the mirror before classifying your surroundings.",
+let girl = new dialogue(
+  "girl",
+  "I might have seen Ellie... Or have I? It's so hard to remember without a sweet treat to motivate me...",
+  "Give Lollipop",
+  "Give Fish",
+  "Oh! I see, well she was running off before I could talk to her and she looked really frazzled. Could never be me, it's not good for my skin. But she went to the right.",
+  "Eeeeek!! How could you do this?! You and your sister are horrible people! She went to the right, so please leave me alone now!",
   "top"
 );
 
-let girl2 = new dialogue(
-  "girl2",
-  "Kitty! Come here so I can drag you around for solely my entertainment.",
+let cat1 = new dialogue(
+  "cat1",
+  "The answer you seek is closer than you presume.",
   "",
   "",
   "",
   "",
-  "top"
+  "bottom"
 );
-
-let girl3 = new dialogue(
-  "girl3",
-  "Yo-You actually got it. How did you convince the old cat? He doesn't even let me come near him.",
-  "Determination",
-  "Guess he must be mysogynistic.",
-  "Well, regardless. A deal is a deal.\n all the info",
-  "Well, regardless. A deal is a deal.\n all the info",
-  "top"
-);
-
-let cat1 = new dialogue("cat1", "...", "", "", "", "", "bottom");
 
 let cat2 = new dialogue(
   "cat2",
-  "I might have what you're looking for...\nFor a price",
-  "A price?",
-  "Of course, nothing in life is free, huh",
-  "I'm hungry and there's plenty o' fish in the pond but they're surrounded by water if you're catching my drift...",
-  "You got it.",
+  "Hey what's a 'semantic' element?",
+  "I'm like eight years old, dude.",
+  "A semantic element conveys its content to the browser & developer.",
+  "Fair, carry on.",
+  "Wow, look at Mr.Know-It-All everyone.",
   "bottom"
 );
 
-let cat3 = new dialogue(
-  "cat3",
-  "Aougha! That's some good fish you caught kid.\nAlright, the ol' lollipop is all yours.",
-  "",
-  "",
-  "",
-  "",
-  "bottom"
-);
-
-let pond = new dialogue(
-  "pond",
-  "Catching fish by hand sure is tough...",
-  "",
-  "...but your catlike reflexes help you.",
-  "",
-  "",
-  "top"
-);
+let car = new dialogue("car", "Kachow", "", "", "", "", "top");
 
 function isNearDialogue(object) {
-  let distance = dist(
-    characterX,
-    characterY,
-    object.position.x,
-    object.position.y
-  );
+  let distance = dist(characterX, characterY, object.x, object.y);
   return distance < 50;
 }
-function displayDialoguePrompt() {
+function displayDialoguePrompt(last) {
   textAlign(CENTER);
   fill(120);
   textSize(20);
-  text("Press 'E' to talk.", 350, 480);
+  if (last === true) {
+    text("Press 'X' to leave.", 340, 480);
+    return;
+  }
+  text("Press 'E' to interact.", 350, 480);
 }
 function checkDialogueHistory(object) {
   choices = JSON.parse(localStorage.dialogueChoices);
@@ -198,13 +173,10 @@ function checkDialogueHistory(object) {
 
 export {
   dialogue,
-  girl1,
-  girl2,
-  girl3,
+  girl,
   cat1,
   cat2,
-  cat3,
-  pond,
+  car,
   isNearDialogue,
   displayDialoguePrompt,
   checkDialogueHistory,

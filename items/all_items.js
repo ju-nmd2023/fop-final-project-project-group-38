@@ -225,35 +225,29 @@ function fishRemains(x, y) {
   fill(0);
   rect(x - 30, y - 10, 5);
 }
+
+let car = {
+  x: 208,
+  y: 360,
+};
+
 let girl = {
-  position: {
-    x: 50,
-    y: 450,
-  },
+  x: 50,
+  y: 450,
 };
 
-let cat = {
-  position: {
-    x: 350,
-    y: 250,
-  },
+let cat1 = {
+  x: 210,
+  y: 190,
 };
 
-let pond = {
-  position: {
-    x: 630,
-    y: 430,
-  },
+let cat2 = {
+  x: 600,
+  y: 200,
+};
+let lastExit = {
+  x: 690,
+  y: 400,
 };
 
-export {
-  cloverInLetter,
-  letter,
-  polaroidBig,
-  bonbon,
-  fish,
-  fishRemains,
-  girl,
-  cat,
-  pond,
-};
+export { cloverInLetter, letter, car, girl, cat1, cat2, lastExit };
