@@ -1,4 +1,4 @@
-import { characterX, characterY } from "../Characters/Aiden.js";
+import { characterX, characterY } from "/Characters/Aiden.js";
 function bedroomAiden() {
   strokeWeight(0);
   // room block
