@@ -1,8 +1,6 @@
-let font = "";
-let picture = "";
+let font;
 function preload() {
   font = loadFont("items/Sacramento-Regular.otf");
-  picture = loadImage("items/polaroid_photo.png");
 }
 
 function cloverInLetter() {
@@ -249,7 +247,6 @@ let pond = {
 };
 
 export {
-  preload,
   cloverInLetter,
   letter,
   polaroidBig,

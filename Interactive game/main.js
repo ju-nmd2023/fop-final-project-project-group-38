@@ -3,6 +3,12 @@ import * as player from "/Characters/Aiden.js";
 import * as rooms from "/Buildings/all_rooms.js";
 import * as dialogues from "/Interactive game/dialogue.js";
 import * as items from "/items/all_items.js";
+//load
+let polaroidImg;
+let letterImg;
+//sounds
+let clickSound = new Audio("/Interactive game/intro.mp3");
+//game start
 let gameStarted = false;
 let startButton;
 //variables for rooms visibility
@@ -13,23 +19,26 @@ let houseAreaVisible = false;
 //variables for dialogues
 let subStringStart = "";
 let k = 0;
-let y = -50;
-let subString = "";
 let dialogueActive = false;
 let choices = {};
 localStorage["dialogueChoices"] = JSON.stringify(choices);
+//overlays
+let pictureDisplayed = false;
+let overlayDisplayed = false;
 
 function setup() {
   createCanvas(700, 500);
-  background(0);
   startButton = createButton("Play");
   startButton.position(700, 500);
   startButton.mousePressed(startGame);
+  clickSound = new Audio("Interactive game/playbutton.mp3");
+  clickSound.volume = 0.1;
 }
 window.setup = setup;
 //start, hide button after play
 function startGame() {
   gameStarted = true;
+  clickSound.play();
   startButton.hide(); //hide the button when game was started
 }
 // all draw, 3 rooms
@@ -41,6 +50,9 @@ function draw() {
     if (bedroomVisible) {
       rooms.bedroomAiden();
       player.checkCollisionsFloor(180, 196, 300, 204);
+      if (overlayDisplayed) {
+        displayOverlay();
+      }
     }
     if (hallwayVisible) {
       rooms.displayHallway();
@@ -51,6 +63,9 @@ function draw() {
     if (entryRoomVisible) {
       rooms.displayEntryRoom(); // Display the entry room if it's visible
       player.checkCollisionsFloor(180, 220, 300, 180);
+      if (pictureDisplayed) {
+        displayPicture();
+      }
     }
     if (houseAreaVisible) {
       rooms.displayHouseArea();
@@ -65,8 +80,8 @@ function draw() {
           dialogueActive = true;
         }
         if (dialogueActive === true) {
-          dialogues.girlDialogueHuman.execute();
-          if (!dialogues.girlDialogueHuman.execute()) {
+          dialogues.girl1.execute();
+          if (!dialogues.girl1.execute()) {
             dialogueActive = false;
           }
         }
@@ -117,4 +132,34 @@ function displayMenu() {
     k++;
   }
   text(subStringStart, 350, 200);
+}
+//LETTER & Picture overlay when clicking on letter in bedroom and wardobe in entry room
+function preload() {
+  letterImg = loadImage("Interactive game/letter.png");
+  polaroidImg = loadImage("Interactive game/polaroid_photo.png");
+}
+window.preload = preload;
+function mousePressed() {
+  if (bedroomVisible && mouseButton === LEFT) {
+    if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
+      overlayDisplayed = !overlayDisplayed;
+    } else if (overlayDisplayed) {
+      //exit the overlay if its displayed and the mouse is clicked outside of it
+      overlayDisplayed = false;
+    }
+  }
+  if (entryRoomVisible && mouseButton === LEFT) {
+    if (mouseX >= 200 && mouseX <= 400 && mouseY >= 50 && mouseY <= 350) {
+      pictureDisplayed = !pictureDisplayed;
+    } else if (overlayDisplayed) {
+      overlayDisplayed = false;
+    }
+  }
+}
+window.mousePressed = mousePressed;
+function displayOverlay() {
+  image(letterImg, 450, 50, 200, 300);
+}
+function displayPicture() {
+  image(polaroidImg, 450, 50, 250, 300);
 }

@@ -108,7 +108,7 @@ class dialogue {
     }
   }
 }
-let girlDialogueHuman = new dialogue(
+let girl1 = new dialogue(
   "girl1",
   "I don't remember what the girl was supposed to say, IF you bring me a lollipop and ONLY then.",
   "Where would I find a Lollipop?",
@@ -118,7 +118,7 @@ let girlDialogueHuman = new dialogue(
   "top"
 );
 
-let girlDialogueCat = new dialogue(
+let girl2 = new dialogue(
   "girl2",
   "Kitty! Come here so I can drag you around for solely my entertainment.",
   "",
@@ -128,7 +128,7 @@ let girlDialogueCat = new dialogue(
   "top"
 );
 
-let girlDialogueHuman2 = new dialogue(
+let girl3 = new dialogue(
   "girl3",
   "Yo-You actually got it. How did you convince the old cat? He doesn't even let me come near him.",
   "Determination",
@@ -138,9 +138,9 @@ let girlDialogueHuman2 = new dialogue(
   "top"
 );
 
-let catDialogueHuman = new dialogue("cat1", "...", "", "", "", "", "bottom");
+let cat1 = new dialogue("cat1", "...", "", "", "", "", "bottom");
 
-let catDialogueCat = new dialogue(
+let cat2 = new dialogue(
   "cat2",
   "I might have what you're looking for...\nFor a price",
   "A price?",
@@ -150,7 +150,7 @@ let catDialogueCat = new dialogue(
   "bottom"
 );
 
-let catDialogueCat2 = new dialogue(
+let cat3 = new dialogue(
   "cat3",
   "Aougha! That's some good fish you caught kid.\nAlright, the ol' lollipop is all yours.",
   "",
@@ -160,7 +160,7 @@ let catDialogueCat2 = new dialogue(
   "bottom"
 );
 
-let pondDialogue = new dialogue(
+let pond = new dialogue(
   "pond",
   "Catching fish by hand sure is tough...",
   "",
@@ -198,13 +198,13 @@ function checkDialogueHistory(object) {
 
 export {
   dialogue,
-  girlDialogueHuman,
-  girlDialogueCat,
-  girlDialogueHuman2,
-  catDialogueCat,
-  catDialogueHuman,
-  catDialogueCat2,
-  pondDialogue,
+  girl1,
+  girl2,
+  girl3,
+  cat1,
+  cat2,
+  cat3,
+  pond,
   isNearDialogue,
   displayDialoguePrompt,
   checkDialogueHistory,
