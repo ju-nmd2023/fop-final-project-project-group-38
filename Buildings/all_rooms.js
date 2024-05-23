@@ -508,6 +508,46 @@ function displayHouseArea() {
   rect(840, 110, 10, 60);
   rect(850, 120, 10, 40);
   pop();
+  //CAT
+  fill("orange");
+  strokeWeight(0);
+  //face
+  rect(600, 184, 15, 10);
+  rect(598, 187, 3, 4);
+  rect(614, 187, 3, 4);
+  //ears
+  rect(600, 180, 4, 6);
+  rect(610, 180, 4, 6);
+  fill("white");
+  rect(611, 180, 2, 3);
+  rect(601, 180, 2, 3);
+  //body
+  fill("orange");
+  rect(604, 194, 20, 10);
+  //legs
+  rect(604, 200, 3, 10);
+  rect(608, 200, 3, 10);
+  fill("white");
+  rect(617, 203, 3, 7);
+  fill("orange");
+  rect(621, 200, 3, 10);
+  //tail
+  rect(623, 194, 4, 2);
+  rect(626, 192, 3, 2);
+  rect(628, 190, 3, 2);
+  fill("white");
+  rect(629, 189, 2, 2);
+  //nose
+  fill("pink");
+  rect(606, 189, 2, 2);
+  //eyes
+  fill("black");
+  rect(603, 187, 2, 2);
+  rect(609, 187, 2, 2);
+  //mouth
+  fill("pink");
+  rect(605, 191, 1, 1);
+  rect(608, 191, 1, 1);
 }
 // Stairs as an object needed for exit interaction
 let stairs = {

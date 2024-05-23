@@ -57,8 +57,8 @@ function draw() {
       player.checkCollisionsFloor(0, 200, 700, 300);
       //CONTINUE HERE PLS: check aiden state THEN which trigger
       if (
-        dialogues.isNearDialogue(girl) &&
-        !dialogues.checkDialogueHistory("girl")
+        dialogues.isNearDialogue(items.girl) &&
+        !dialogues.checkDialogueHistory("girl1")
       ) {
         dialogues.displayDialoguePrompt();
         if (key === "e") {
@@ -66,6 +66,9 @@ function draw() {
         }
         if (dialogueActive === true) {
           dialogues.girlDialogueHuman.execute();
+          if (!dialogues.girlDialogueHuman.execute()) {
+            dialogueActive = false;
+          }
         }
       }
     }
