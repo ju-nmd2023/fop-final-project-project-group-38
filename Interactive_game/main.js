@@ -1,7 +1,7 @@
 //imports
 import * as player from "../Characters/Aiden.js";
 import * as rooms from "../Buildings/all_rooms.js";
-import * as dialogues from "./dialogue.js";
+import * as dialogues from "../dialogue.js";
 import * as items from "../items/all_items.js";
 //load
 let polaroidImg;
