@@ -7,7 +7,7 @@ import * as items from "../items/all_items.js";
 let polaroidImg;
 let letterImg;
 //sounds
-let clickSound = new Audio("./playbutton.mp3");
+let clickSound = new Audio(".Interactive_game/playbutton.mp3");
 //game start
 let gameStarted = false;
 let startButton;
@@ -197,8 +197,8 @@ function displayMenu() {
 }
 //LETTER & Picture overlay when clicking on letter in bedroom and wardobe in entry room
 function preload() {
-  letterImg = loadImage("./letter.png");
-  polaroidImg = loadImage("./polaroid_photo.png");
+  letterImg = loadImage(".Interactive_game/letter.png");
+  polaroidImg = loadImage(".Interactive_game/polaroid_photo.png");
 }
 window.preload = preload;
 function mousePressed() {
