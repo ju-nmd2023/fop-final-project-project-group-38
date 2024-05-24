@@ -1,13 +1,13 @@
 //imports
-import * as player from "/Characters/Aiden.js";
-import * as rooms from "/Buildings/all_rooms.js";
-import * as dialogues from "/Interactive_game/dialogue.js";
-import * as items from "/items/all_items.js";
+import * as player from "../Characters/Aiden.js";
+import * as rooms from "../Buildings/all_rooms.js";
+import * as dialogues from "./dialogue.js";
+import * as items from "../items/all_items.js";
 //load
 let polaroidImg;
 let letterImg;
 //sounds
-let clickSound = new Audio("/Interactive_game/playbutton.mp3");
+let clickSound = new Audio("./Interactive_game/playbutton.mp3");
 //game start
 let gameStarted = false;
 let startButton;
