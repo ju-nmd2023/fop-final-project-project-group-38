@@ -1,46 +1,102 @@
 //imports
-import * as player from "Characters/Aiden.js";
-import * as rooms from "Buildings/all_rooms.js";
-import * as dialogues from "Interactive-game/dialogue.js";
-import * as items from "items/all_items.js";
+import * as player from "/Characters/Aiden.js";
+import * as rooms from "/Buildings/all_rooms.js";
+import * as dialogues from "/Interactive_game/dialogue.js";
+import * as items from "/items/all_items.js";
+
 //load
 let polaroidImg;
 let letterImg;
+let diaryImg;
+let diaryPage1;
+let diaryPage2;
+
 //sounds
 let clickSound = new Audio("Interactive_game/playbutton.mp3");
+
 //game start
 let gameStarted = false;
 let startButton;
+let diaryButton = false;
+
 //variables for rooms visibility
 let bedroomVisible = true;
 let hallwayVisible = false;
 let entryRoomVisible = false;
 let houseAreaVisible = false;
 let lastAreaVisible = false;
+
 //variables for dialogues
 let subStringStart = "";
 let k = 0;
 let dialogueActive = false;
 let choices = {};
 localStorage["dialogueChoices"] = JSON.stringify(choices);
+
 //overlays
 let pictureDisplayed = false;
 let overlayDisplayed = false;
 
+//diary pages state
+let diaryOverlayDisplayed = false;
+let currentDiaryPage = 1;
+let nextPageButton, prevPageButton;
+
 function setup() {
   createCanvas(700, 500);
   startButton = createButton("Play");
-  startButton.position(700, 500);
+  startButton.position(700, 550); // Center the start button
   startButton.mousePressed(startGame);
-  clickSound;
   clickSound.volume = 0.1;
 }
 window.setup = setup;
+// Diary
+function diary() {
+  diaryImg = createImg("/Interactive_game/diary.png");
+  let diaryButton = createButton("");
+  diaryButton.id("diaryButton");
+  diaryButton.position(1000, 130);
+  diaryImg.parent(diaryButton);
+  diaryImg.style("width", "90px");
+  diaryButton.mousePressed(() => {
+    diaryOverlayDisplayed = !diaryOverlayDisplayed;
+    if (diaryOverlayDisplayed) {
+      currentDiaryPage = 1;
+      createDiaryButtons();
+    }
+  });
+}
+function displayDiaryOverlay() {
+  if (currentDiaryPage === 1) {
+    image(diaryPage1, 150, 0, 370, 550);
+  } else if (currentDiaryPage === 2) {
+    image(diaryPage2, 150, 0, 370, 550);
+  }
+}
+function createDiaryButtons() {
+  nextPageButton = createButton("->");
+  nextPageButton.position(940, 600);
+  nextPageButton.mousePressed(nextDiaryPage);
+  prevPageButton = createButton("<-");
+  prevPageButton.position(900, 600);
+  prevPageButton.mousePressed(prevDiaryPage);
+}
+function nextDiaryPage() {
+  if (currentDiaryPage < 2) {
+    currentDiaryPage++;
+  }
+}
+function prevDiaryPage() {
+  if (currentDiaryPage > 1) {
+    currentDiaryPage--;
+  }
+}
 //start, hide button after play
 function startGame() {
   gameStarted = true;
   clickSound.play();
-  startButton.hide(); //hide the button when game was started
+  startButton.hide();
+  diaryButton = true;
 }
 // all draw, 3 rooms
 function draw() {
@@ -51,6 +107,7 @@ function draw() {
     if (bedroomVisible) {
       rooms.bedroomAiden();
       player.checkCollisionsFloor(180, 196, 300, 204);
+      diary();
       //interaction
       if (
         dialogues.isNearDialogue(items.car) &&
@@ -177,6 +234,10 @@ function draw() {
         rooms.displayLastArea();
       }
     }
+    if (diaryOverlayDisplayed) {
+      displayDiaryOverlay();
+      createDiaryButtons();
+    }
   }
 }
 window.draw = draw;
@@ -197,31 +258,45 @@ function displayMenu() {
 }
 //LETTER & Picture overlay when clicking on letter in bedroom and wardobe in entry room
 function preload() {
-  letterImg = loadImage("Interactive_game/letter.png");
-  polaroidImg = loadImage("Interactive_game/polaroid_photo.png");
+  letterImg = loadImage("/Interactive_game/letter.png");
+  polaroidImg = loadImage("/Interactive_game/polaroid_photo.png");
+  diaryImg = loadImage("/Interactive_game/diary.png");
+  diaryPage1 = loadImage("/Interactive_game/Monday.png");
+  diaryPage2 = loadImage("/Interactive_game/Thursday.png");
 }
 window.preload = preload;
-function mousePressed() {
-  if (bedroomVisible && mouseButton === LEFT) {
-    if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
-      overlayDisplayed = !overlayDisplayed;
-    } else if (overlayDisplayed) {
-      //exit the overlay if its displayed and the mouse is clicked outside of it
-      overlayDisplayed = false;
-    }
-  }
-  if (entryRoomVisible && mouseButton === LEFT) {
-    if (mouseX >= 200 && mouseX <= 400 && mouseY >= 50 && mouseY <= 350) {
-      pictureDisplayed = !pictureDisplayed;
-    } else if (overlayDisplayed) {
-      overlayDisplayed = false;
-    }
-  }
+
+function hideDiaryButtons() {
+  // tried this to hide buttons after overlay is closed
+  if (nextPageButton) nextPageButton.hide();
+  if (prevPageButton) prevPageButton.hide();
 }
-window.mousePressed = mousePressed;
 function displayOverlay() {
   image(letterImg, 450, 50, 200, 300);
 }
 function displayPicture() {
   image(polaroidImg, 450, 50, 250, 300);
 }
+
+function mousePressed() {
+  if (diaryOverlayDisplayed && mouseButton === RIGHT) {
+    // idk why but right works as left??
+    diaryOverlayDisplayed = false;
+  } else if (mouseX >= 1000 && mouseX <= 1090 && mouseY >= 130 && mouseY <= 220)
+    if (bedroomVisible && mouseButton === RIGHT) {
+      if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
+        overlayDisplayed = !overlayDisplayed;
+      } else if (overlayDisplayed) {
+        //exit the overlay if its displayed and the mouse is clicked outside of it
+        overlayDisplayed = false;
+      }
+    }
+  if (entryRoomVisible && mouseButton === LEFT) {
+    if (mouseX >= 200 && mouseX <= 400 && mouseY >= 50 && mouseY <= 350) {
+      pictureDisplayed = !pictureDisplayed;
+    } else if (pictureDisplayed) {
+      pictureDisplayed = false;
+    }
+  }
+}
+window.mousePressed = mousePressed;
