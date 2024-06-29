@@ -67,7 +67,7 @@ function diary() {
   diaryImg = createImg("/Interactive_game/diary.png");
   let diaryButton = createButton("");
   diaryButton.id("diaryButton");
-  diaryButton.position(1000, 130);
+  diaryButton.position(350, 120);
   diaryImg.parent(diaryButton);
   diaryImg.style("width", "90px");
   diaryButton.mousePressed(() => {
@@ -87,10 +87,10 @@ function displayDiaryOverlay() {
 }
 function createDiaryButtons() {
   nextPageButton = createButton("->");
-  nextPageButton.position(940, 600);
+  nextPageButton.position(1030, 590);
   nextPageButton.mousePressed(nextDiaryPage);
   prevPageButton = createButton("<-");
-  prevPageButton.position(900, 600);
+  prevPageButton.position(990, 590);
   prevPageButton.mousePressed(prevDiaryPage);
 }
 function nextDiaryPage() {
