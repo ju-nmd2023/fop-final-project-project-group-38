@@ -43,9 +43,6 @@ let nextPageButton, prevPageButton;
 
 //inventory
 let inventoryVisible = false;
-let inventoryX = 98;
-let inventoryY = 75;
-let itemSelected = false;
 
 function setup() {
   createCanvas(700, 500);
@@ -223,7 +220,6 @@ function draw() {
     }
     if (inventoryVisible) {
       items.displayInventory();
-      inventorySelect(inventoryX, inventoryY, itemSelected);
     }
 
     if (!inventoryVisible) {
@@ -267,7 +263,17 @@ function draw() {
     }
     if (diaryOverlayDisplayed) {
       displayDiaryOverlay();
-      createDiaryButtons();
+
+      if (!nextPageButton && !prevPageButton) {
+        createDiaryButtons();
+      }
+    } else {
+      if (nextPageButton) {
+        nextPageButton.hide();
+      }
+      if (prevPageButton) {
+        prevPageButton.hide();
+      }
     }
   }
 }
@@ -333,44 +339,34 @@ function mousePressed() {
 }
 window.mousePressed = mousePressed;
 
-function inventorySelect(x, y, selected) {
-  if (selected === false) {
-    push();
-    noStroke();
-    fill("rgba(81, 219, 215, 0.5)");
-    rect(x, y, 105);
-    pop();
-  } else {
-    noFill();
-    stroke(81, 219, 215);
-    strokeWeight(5);
-    rect(x + 2, y + 2, 100);
-  }
+function inventorySelect(x, y) {
+  push();
+  noStroke();
+  fill("rgba(81, 219, 215, 0.5)");
+  rect(x, y, 105);
+  pop();
 }
 
 function keyPressed() {
   if (keyCode === 73) {
     inventoryVisible = true;
-    inventoryX = 98;
-    inventoryY = 75;
-    itemSelected = false;
   }
   if (keyCode === 27) {
     inventoryVisible = false;
   }
   if (inventoryVisible) {
-    if (keyCode === 65 && inventoryX > 98) {
-      inventoryX -= 178;
-    } else if (keyCode === 68 && inventoryX < 452) {
-      inventoryX += 177;
-    } else if (keyCode === 87 && inventoryY !== 75) {
-      inventoryY = 75;
-    } else if (keyCode === 83 && inventoryY !== 262) {
-      inventoryY = 262;
-    }
-
-    if (keyCode === 13) {
-      itemSelected = true;
+    let x = 98;
+    let y = 75;
+    inventorySelect(x, y);
+    if (keyCode === 65 && x > 98) {
+      x = x - 195;
+    } else if (keyCode === 68 && x < 452) {
+      console.log("it should move to the right");
+      x = x + 195;
+    } else if (keyCode === 87 && y !== 75) {
+      y = 75;
+    } else if (keyCode === 83 && y !== 262) {
+      y = 262;
     }
   }
 }
