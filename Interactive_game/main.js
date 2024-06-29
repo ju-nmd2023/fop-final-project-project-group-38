@@ -36,6 +36,14 @@ localStorage["dialogueChoices"] = JSON.stringify(choices);
 let pictureDisplayed = false;
 let overlayDisplayed = false;
 
+//diary pages state
+let diaryOverlayDisplayed = false;
+let currentDiaryPage = 1;
+let nextPageButton, prevPageButton;
+
+//inventory
+let inventoryVisible = false;
+
 function setup() {
   createCanvas(700, 500);
   startButton = createButton("Play");
@@ -284,6 +292,19 @@ function preload() {
   diaryPage2 = loadImage("/Interactive_game/Thursday.png");
 }
 window.preload = preload;
+
+function clickOnItem(location, object) {
+  if (location && mouseButton === LEFT && !items.checkIsInInventory(object)) {
+    if (
+      mouseX >= object.x - 20 &&
+      mouseX <= object.x + 20 &&
+      mouseY >= object.y - 20 &&
+      mouseY <= object.y + 20
+    ) {
+      items.addToInventory(object);
+    }
+  }
+}
 function mousePressed() {
   //overlays
   if (bedroomVisible && mouseButton === LEFT) {
@@ -307,6 +328,40 @@ function mousePressed() {
   clickOnItem(entryRoomVisible, items.candy);
 }
 window.mousePressed = mousePressed;
+
+function inventorySelect(x, y) {
+  push();
+  noStroke();
+  fill("rgba(81, 219, 215, 0.5)");
+  rect(x, y, 105);
+  pop();
+}
+
+function keyPressed() {
+  if (keyCode === 73) {
+    inventoryVisible = true;
+  }
+  if (keyCode === 27) {
+    inventoryVisible = false;
+  }
+  if (inventoryVisible) {
+    let x = 98;
+    let y = 75;
+    inventorySelect(x, y);
+    if (keyCode === 65 && x > 98) {
+      x = x - 195;
+    } else if (keyCode === 68 && x < 452) {
+      console.log("it should move to the right");
+      x = x + 195;
+    } else if (keyCode === 87 && y !== 75) {
+      y = 75;
+    } else if (keyCode === 83 && y !== 262) {
+      y = 262;
+    }
+  }
+}
+window.keyPressed = keyPressed;
+
 function displayOverlay() {
   image(letterImg, 450, 50, 200, 300);
 }
