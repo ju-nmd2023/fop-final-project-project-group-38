@@ -43,6 +43,8 @@ let nextPageButton, prevPageButton;
 
 //inventory
 let inventoryVisible = false;
+let inventoryX = 98;
+let inventoryY = 75;
 
 function setup() {
   createCanvas(700, 500);
@@ -220,6 +222,7 @@ function draw() {
     }
     if (inventoryVisible) {
       items.displayInventory();
+      inventorySelect(inventoryX, inventoryY);
     }
 
     if (!inventoryVisible) {
@@ -345,18 +348,14 @@ function keyPressed() {
     inventoryVisible = false;
   }
   if (inventoryVisible) {
-    let x = 98;
-    let y = 75;
-    inventorySelect(x, y);
-    if (keyCode === 65 && x > 98) {
-      x = x - 195;
-    } else if (keyCode === 68 && x < 452) {
-      console.log("it should move to the right");
-      x = x + 195;
-    } else if (keyCode === 87 && y !== 75) {
-      y = 75;
-    } else if (keyCode === 83 && y !== 262) {
-      y = 262;
+    if (keyCode === 65 && inventoryX > 98) {
+      inventoryX -= 178;
+    } else if (keyCode === 68 && inventoryX < 452) {
+      inventoryX += 177;
+    } else if (keyCode === 87 && inventoryY !== 75) {
+      inventoryY = 75;
+    } else if (keyCode === 83 && inventoryY !== 262) {
+      inventoryY = 262;
     }
   }
 }

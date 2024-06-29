@@ -338,7 +338,6 @@ function addToInventory(object) {
   items.push(object);
   localStorage["inventory"] = JSON.stringify(items);
 }
-
 function displayInventory() {
   //design
   fill(0);
