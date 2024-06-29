@@ -50,6 +50,14 @@ function setup() {
   clickSound.volume = 0.1;
 }
 window.setup = setup;
+
+//start, hide button after play
+function startGame() {
+  gameStarted = true;
+  clickSound.play();
+  startButton.hide();
+  diaryButton = true;
+}
 // Diary
 function diary() {
   diaryImg = createImg("/Interactive_game/diary.png");
@@ -90,13 +98,6 @@ function prevDiaryPage() {
   if (currentDiaryPage > 1) {
     currentDiaryPage--;
   }
-}
-//start, hide button after play
-function startGame() {
-  gameStarted = true;
-  clickSound.play();
-  startButton.hide();
-  diaryButton = true;
 }
 // all draw, 3 rooms
 function draw() {
@@ -266,11 +267,6 @@ function preload() {
 }
 window.preload = preload;
 
-function hideDiaryButtons() {
-  // tried this to hide buttons after overlay is closed
-  if (nextPageButton) nextPageButton.hide();
-  if (prevPageButton) prevPageButton.hide();
-}
 function displayOverlay() {
   image(letterImg, 450, 50, 200, 300);
 }
@@ -279,18 +275,13 @@ function displayPicture() {
 }
 
 function mousePressed() {
-  if (diaryOverlayDisplayed && mouseButton === RIGHT) {
-    // idk why but right works as left??
-    diaryOverlayDisplayed = false;
-  } else if (mouseX >= 1000 && mouseX <= 1090 && mouseY >= 130 && mouseY <= 220)
-    if (bedroomVisible && mouseButton === RIGHT) {
-      if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
-        overlayDisplayed = !overlayDisplayed;
-      } else if (overlayDisplayed) {
-        //exit the overlay if its displayed and the mouse is clicked outside of it
-        overlayDisplayed = false;
-      }
+  if (bedroomVisible && mouseButton === LEFT) {
+    if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
+      overlayDisplayed = !overlayDisplayed;
+    } else if (overlayDisplayed) {
+      overlayDisplayed = false;
     }
+  }
   if (entryRoomVisible && mouseButton === LEFT) {
     if (mouseX >= 200 && mouseX <= 400 && mouseY >= 50 && mouseY <= 350) {
       pictureDisplayed = !pictureDisplayed;
