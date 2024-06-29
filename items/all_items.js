@@ -374,6 +374,13 @@ function displayInventory() {
   }
   rect(277, 264, 100);
   rect(454, 264, 100);
+
+  //instructions
+  textAlign(CENTER);
+  noStroke();
+  fill(120);
+  textSize(20);
+  text("Press 'ENTER' to select item.", 350, 480);
 }
 
 export {
