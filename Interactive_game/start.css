@@ -10,7 +10,7 @@ button {
   background-color: transparent;
   padding: 10px;
   outline: none;
-  border-radius: 5px;
+  border-radius: 0px;
 }
 button:hover {
   color: black;
@@ -41,4 +41,22 @@ audio {
   display: none;
   border-color: #36454f;
   position: absolute;
+}
+/*diary*/
+#diaryButton {
+  transition: none;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+#diaryButton img {
+  display: block;
+  
+}
+#diaryButton:hover {
+  z-index: 1000; /* bring transformed image to front */
+}
+#diaryButton img:hover {
+  transform: scale(1.2);
 }
