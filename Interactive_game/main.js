@@ -1,8 +1,9 @@
 //imports
-import * as player from "Characters/Aiden.js";
-import * as rooms from "Buildings/all_rooms.js";
-import * as dialogues from "Interactive-game/dialogue.js";
-import * as items from "items/all_items.js";
+import * as player from "/Characters/Aiden.js";
+import * as rooms from "/Buildings/all_rooms.js";
+import * as dialogues from "./dialogue.js";
+import * as items from "/items/all_items.js";
+import { checkIsInInventory } from "../items/all_items.js";
 //load
 let polaroidImg;
 let letterImg;
@@ -26,6 +27,8 @@ localStorage["dialogueChoices"] = JSON.stringify(choices);
 //overlays
 let pictureDisplayed = false;
 let overlayDisplayed = false;
+//inventory
+let inventoryVisible = false;
 
 function setup() {
   createCanvas(700, 500);
@@ -67,6 +70,13 @@ function draw() {
           }
         }
       }
+
+      if (
+        items.isNearItem(items.fishBones) &&
+        items.checkIsInInventory(items.fishBones)
+      ) {
+        items.displayInventoryPrompt();
+      }
       //letter
       if (overlayDisplayed) {
         displayOverlay();
@@ -75,6 +85,12 @@ function draw() {
     if (hallwayVisible) {
       rooms.displayHallway();
       player.checkCollisionsFloor(250, 30, 200, 470);
+      if (
+        items.isNearItem(items.polaroid) &&
+        items.checkIsInInventory(items.polaroid)
+      ) {
+        items.displayInventoryPrompt();
+      }
     } else {
       rooms.door.draw(); //removing doors in hallway when its visible
     }
@@ -96,6 +112,12 @@ function draw() {
             dialogueActive = false;
           }
         }
+      }
+      if (
+        items.isNearItem(items.candy) &&
+        items.checkIsInInventory(items.candy)
+      ) {
+        items.displayInventoryPrompt();
       }
       //Polaroid
       if (pictureDisplayed) {
@@ -136,11 +158,16 @@ function draw() {
         }
       }
     }
-    if (!dialogueActive) {
+    if (!dialogueActive && !inventoryVisible) {
       player.updateCharacterPosition(); //character movement
     }
+    if (inventoryVisible) {
+      items.displayInventory();
+    }
 
-    player.drawCharacter(player.characterX, player.characterY);
+    if (!inventoryVisible) {
+      player.drawCharacter(player.characterX, player.characterY);
+    }
     // transition from bedroom to hallway
     if (rooms.isNearDoor() && !hallwayVisible) {
       rooms.displayDoorPrompt();
@@ -201,7 +228,21 @@ function preload() {
   polaroidImg = loadImage("Interactive_game/polaroid_photo.png");
 }
 window.preload = preload;
+
+function clickOnItem(location, object) {
+  if (location && mouseButton === LEFT && !items.checkIsInInventory(object)) {
+    if (
+      mouseX >= object.x - 20 &&
+      mouseX <= object.x + 20 &&
+      mouseY >= object.y - 20 &&
+      mouseY <= object.y + 20
+    ) {
+      items.addToInventory(object);
+    }
+  }
+}
 function mousePressed() {
+  //overlays
   if (bedroomVisible && mouseButton === LEFT) {
     if (mouseX >= 400 && mouseX <= 448 && mouseY >= 280 && mouseY <= 292) {
       overlayDisplayed = !overlayDisplayed;
@@ -217,8 +258,46 @@ function mousePressed() {
       overlayDisplayed = false;
     }
   }
+
+  //add to inventory
+  clickOnItem(bedroomVisible, items.fishBones);
+  clickOnItem(hallwayVisible, items.polaroid);
+  clickOnItem(entryRoomVisible, items.candy);
 }
 window.mousePressed = mousePressed;
+
+function inventorySelect(x, y) {
+  push();
+  noStroke();
+  fill("rgba(81, 219, 215, 0.5)");
+  rect(x, y, 105);
+  pop();
+}
+
+function keyPressed() {
+  if (keyCode === 73) {
+    inventoryVisible = true;
+  }
+  if (keyCode === 27) {
+    inventoryVisible = false;
+  }
+  if (inventoryVisible) {
+    let x = 98;
+    let y = 75;
+    inventorySelect(x, y);
+    if (keyCode === 65 && x > 98) {
+      x = x - 195;
+    } else if (keyCode === 68 && x < 452) {
+      console.log("it should move to the right");
+      x = x + 195;
+    } else if (keyCode === 87 && y !== 75) {
+      y = 75;
+    } else if (keyCode === 83 && y !== 262) {
+      y = 262;
+    }
+  }
+}
+window.keyPressed = keyPressed;
 function displayOverlay() {
   image(letterImg, 450, 50, 200, 300);
 }

@@ -1,4 +1,13 @@
 import { characterX, characterY } from "/Characters/Aiden.js";
+import {
+  polaroidSmall,
+  bonbon,
+  fishRemains,
+  checkIsInInventory,
+  fishBones,
+  candy,
+  polaroid,
+} from "../items/all_items.js";
 function bedroomAiden() {
   strokeWeight(0);
   // room block
@@ -93,6 +102,13 @@ function bedroomAiden() {
   rect(212, 354, 16, 4);
   rect(208, 362, 8);
   rect(224, 362, 8);
+  //fish
+  if (!checkIsInInventory(fishBones)) {
+    push();
+    scale(0.33);
+    fishRemains(1100, 1000);
+    pop();
+  }
   //poster
   fill(0);
   rect(204, 112, 36, 48);
@@ -129,11 +145,20 @@ function displayHallway() {
   rect(325, 0, 50, 30);
   fill(94, 76, 38);
   stairs.draw();
+  push();
   stroke(217, 153, 35);
   strokeWeight(1);
   rect(325, 30, 50, 10);
   rect(330, 20, 40, 10);
   rect(335, 10, 30, 10);
+  pop();
+  //polaroid
+  if (!checkIsInInventory(polaroid)) {
+    push();
+    scale(0.5);
+    polaroidSmall(580, 800);
+    pop();
+  }
 }
 
 function displayEntryRoom() {
@@ -237,6 +262,13 @@ function displayEntryRoom() {
   fill("yellow");
   rect(203, 187, 3, 3);
   rect(209, 187, 3, 3);
+  //bonbon
+  if (!checkIsInInventory(candy)) {
+    push();
+    scale(0.25);
+    bonbon(1720, 1200);
+    pop();
+  }
 }
 
 function displayHouseArea() {

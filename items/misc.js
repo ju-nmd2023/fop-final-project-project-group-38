@@ -70,15 +70,3 @@ function oddFish(x, y) {
   fill(0);
   rect(x - 40, y - 5, 5);
 }
-
-function polaroidSmall(x, y) {
-  noStroke();
-  push();
-  translate(x, y);
-  rotate(PI / 6);
-  fill(255);
-  rect(0, 0, 50, 55);
-  fill(0);
-  rect(5, 5, 40);
-  pop();
-}

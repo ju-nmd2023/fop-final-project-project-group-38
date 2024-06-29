@@ -1,8 +1,20 @@
+import { characterX, characterY } from "/Characters/Aiden.js";
+
 let font;
+
+let normalFish = {
+  x: 0,
+  y: 0,
+  description: "fish",
+};
+let items = [normalFish];
+localStorage["inventory"] = JSON.stringify(items);
+
 function preload() {
   font = loadFont("items/Sacramento-Regular.otf");
 }
 
+//items
 function cloverInLetter() {
   fill(100);
   noStroke();
@@ -88,6 +100,25 @@ function polaroidBig() {
   pop();
 }
 
+function polaroidSmall(x, y) {
+  noStroke();
+  push();
+  translate(x, y);
+  rotate(PI / 6);
+  fill(255);
+  if (isNearItem(polaroid) && !checkIsInInventory(polaroid)) {
+    stroke(81, 219, 215);
+    strokeWeight(3);
+  } else {
+    noStroke();
+  }
+  rect(0, 0, 50, 55);
+  noStroke();
+  fill(0);
+  rect(5, 5, 40);
+  pop();
+}
+
 function bonbon(x, y) {
   noStroke();
   //fill colour
@@ -100,6 +131,12 @@ function bonbon(x, y) {
   rect(x + 30, y - 10, 5, 20);
   rect(x + 35, y - 20, 15, 40);
   //outline
+  if (isNearItem(candy) && !checkIsInInventory(candy)) {
+    stroke(81, 219, 215);
+    strokeWeight(3);
+  } else {
+    noStroke();
+  }
   fill(148, 25, 117);
   rect(x - 55, y - 15, 5);
   rect(x - 55, y - 5, 5, 10);
@@ -183,7 +220,12 @@ function fish(x, y) {
 }
 
 function fishRemains(x, y) {
-  noStroke();
+  if (isNearItem(fishBones) && !checkIsInInventory(fishBones)) {
+    stroke(81, 219, 215);
+    strokeWeight(3);
+  } else {
+    noStroke();
+  }
   //head & tail
   fill(150);
   rect(x - 45, y - 5, 5);
@@ -222,10 +264,12 @@ function fishRemains(x, y) {
   rect(x + 25, y - 20, 5);
   rect(x + 25, y + 10, 5);
   //eye
+  noStroke();
   fill(0);
   rect(x - 30, y - 10, 5);
 }
 
+//dialogue prompts
 let car = {
   x: 208,
   y: 360,
@@ -250,4 +294,109 @@ let lastExit = {
   y: 400,
 };
 
-export { cloverInLetter, letter, car, girl, cat1, cat2, lastExit };
+//items to pick up
+let fishBones = {
+  x: 366,
+  y: 333,
+  description: "dead fish",
+};
+
+let candy = {
+  x: 430,
+  y: 300,
+  description: "candy",
+};
+
+let polaroid = {
+  x: 290,
+  y: 400,
+  description: "polaroid",
+};
+
+function isNearItem(object) {
+  let distance = dist(characterX, characterY, object.x, object.y);
+  return distance < 50;
+}
+function displayInventoryPrompt() {
+  textAlign(CENTER);
+  fill(120);
+  textSize(20);
+  text("Press 'I' to access inventory.", 350, 480);
+}
+function checkIsInInventory(object) {
+  if (object !== undefined) {
+    items = JSON.parse(localStorage.inventory);
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].description === object.description) {
+        return true;
+      }
+    }
+  }
+}
+function addToInventory(object) {
+  items = JSON.parse(localStorage.inventory);
+  items.push(object);
+  localStorage["inventory"] = JSON.stringify(items);
+}
+
+function displayInventory() {
+  //design
+  fill(0);
+  rect(0, 0, 700, 500);
+  // compartments
+  stroke(255);
+  strokeWeight(5);
+  rect(100, 77, 100);
+  if (checkIsInInventory(normalFish)) {
+    push();
+    scale(0.9);
+    fish(165, 140);
+    pop();
+  }
+  rect(277, 77, 100);
+  if (checkIsInInventory(fishBones)) {
+    push();
+    scale(0.9);
+    fishRemains(359, 140);
+    pop();
+  }
+  rect(454, 77, 100);
+  if (checkIsInInventory(polaroid)) {
+    push();
+    polaroidSmall(490, 90);
+    pop();
+  }
+  rect(100, 264, 100);
+  if (checkIsInInventory(candy)) {
+    push();
+    scale(0.6);
+    bonbon(250, 500);
+    pop();
+  }
+  rect(277, 264, 100);
+  rect(454, 264, 100);
+  //select item
+}
+
+export {
+  cloverInLetter,
+  letter,
+  polaroidSmall,
+  bonbon,
+  fish,
+  fishRemains,
+  car,
+  girl,
+  cat1,
+  cat2,
+  lastExit,
+  normalFish,
+  fishBones,
+  candy,
+  polaroid,
+  isNearItem,
+  displayInventoryPrompt,
+  checkIsInInventory,
+  addToInventory,
+  displayInventory,
+};
