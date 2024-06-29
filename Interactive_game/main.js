@@ -45,6 +45,7 @@ let nextPageButton, prevPageButton;
 let inventoryVisible = false;
 let inventoryX = 98;
 let inventoryY = 75;
+let itemSelected = false;
 
 function setup() {
   createCanvas(700, 500);
@@ -222,7 +223,7 @@ function draw() {
     }
     if (inventoryVisible) {
       items.displayInventory();
-      inventorySelect(inventoryX, inventoryY);
+      inventorySelect(inventoryX, inventoryY, itemSelected);
     }
 
     if (!inventoryVisible) {
@@ -332,17 +333,27 @@ function mousePressed() {
 }
 window.mousePressed = mousePressed;
 
-function inventorySelect(x, y) {
-  push();
-  noStroke();
-  fill("rgba(81, 219, 215, 0.5)");
-  rect(x, y, 105);
-  pop();
+function inventorySelect(x, y, selected) {
+  if (selected === false) {
+    push();
+    noStroke();
+    fill("rgba(81, 219, 215, 0.5)");
+    rect(x, y, 105);
+    pop();
+  } else {
+    noFill();
+    stroke(81, 219, 215);
+    strokeWeight(5);
+    rect(x + 2, y + 2, 100);
+  }
 }
 
 function keyPressed() {
   if (keyCode === 73) {
     inventoryVisible = true;
+    inventoryX = 98;
+    inventoryY = 75;
+    itemSelected = false;
   }
   if (keyCode === 27) {
     inventoryVisible = false;
@@ -356,6 +367,10 @@ function keyPressed() {
       inventoryY = 75;
     } else if (keyCode === 83 && inventoryY !== 262) {
       inventoryY = 262;
+    }
+
+    if (keyCode === 13) {
+      itemSelected = true;
     }
   }
 }

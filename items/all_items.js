@@ -374,7 +374,6 @@ function displayInventory() {
   }
   rect(277, 264, 100);
   rect(454, 264, 100);
-  //select item
 }
 
 export {
