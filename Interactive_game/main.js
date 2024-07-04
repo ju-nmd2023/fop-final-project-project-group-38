@@ -1,8 +1,8 @@
 //imports
-import * as player from "/Characters/Aiden.js";
-import * as rooms from "/Buildings/all_rooms.js";
-import * as dialogues from "./dialogue.js";
-import * as items from "/items/all_items.js";
+import * as player from "Characters/Aiden.js";
+import * as rooms from "Buildings/all_rooms.js";
+import * as dialogues from "dialogue.js";
+import * as items from "items/all_items.js";
 //load
 let polaroidImg;
 let letterImg;
@@ -62,7 +62,7 @@ function startGame() {
 }
 // Diary
 function diary() {
-  diaryImg = createImg("/Interactive_game/diary.png");
+  diaryImg = createImg("Interactive_game/diary.png");
   let diaryButton = createButton("");
   diaryButton.id("diaryButton");
   diaryButton.position(350, 120);
@@ -295,11 +295,11 @@ function displayMenu() {
 }
 //LETTER & Picture overlay when clicking on letter in bedroom and wardobe in entry room
 function preload() {
-  letterImg = loadImage("/Interactive_game/letter.png");
-  polaroidImg = loadImage("/Interactive_game/polaroid_photo.png");
-  diaryImg = loadImage("/Interactive_game/diary.png");
-  diaryPage1 = loadImage("/Interactive_game/Monday.png");
-  diaryPage2 = loadImage("/Interactive_game/Thursday.png");
+  letterImg = loadImage("Interactive_game/letter.png");
+  polaroidImg = loadImage("Interactive_game/polaroid_photo.png");
+  diaryImg = loadImage("Interactive_game/diary.png");
+  diaryPage1 = loadImage("Interactive_game/Monday.png");
+  diaryPage2 = loadImage("Interactive_game/Thursday.png");
 }
 window.preload = preload;
 
