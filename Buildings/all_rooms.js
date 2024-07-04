@@ -1,4 +1,4 @@
-import { characterX, characterY } from "/Characters/Aiden.js";
+import { characterX, characterY } from "Characters/Aiden.js";
 import {
   polaroidSmall,
   bonbon,
@@ -7,7 +7,7 @@ import {
   fishBones,
   candy,
   polaroid,
-} from "../items/all_items.js";
+} from "items/all_items.js";
 function bedroomAiden() {
   strokeWeight(0);
   // room block
